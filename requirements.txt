@@ -1,0 +1,10 @@
+psutil
+pywin32
+tk
+pygetwindow
+playsound
+flask
+flask-cors
+reportlab
+win10toast
+requests

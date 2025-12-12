@@ -1,0 +1,349 @@
+"""
+Dashboard web profesional para Guardian.
+Cliente completo HTML+JavaScript para monitoreo remoto.
+"""
+
+import json
+
+DASHBOARD_HTML = """
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guardian Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        header {
+            background: rgba(0,0,0,0.5);
+            color: white;
+            padding: 30px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            backdrop-filter: blur(10px);
+        }
+        
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        
+        .status {
+            display: flex;
+            gap: 30px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .status-card {
+            background: rgba(255,255,255,0.1);
+            padding: 15px 25px;
+            border-radius: 8px;
+            border: 2px solid rgba(255,255,255,0.3);
+        }
+        
+        .status-card h3 {
+            font-size: 0.8em;
+            opacity: 0.8;
+            margin-bottom: 5px;
+        }
+        
+        .status-card .value {
+            font-size: 1.8em;
+            font-weight: bold;
+        }
+        
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+        
+        .card h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 1.3em;
+        }
+        
+        canvas {
+            max-height: 300px;
+        }
+        
+        .gamification {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+        }
+        
+        .badges {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-top: 15px;
+        }
+        
+        .badge {
+            background: rgba(255,255,255,0.2);
+            padding: 10px 15px;
+            border-radius: 20px;
+            border: 2px solid rgba(255,255,255,0.4);
+            font-size: 0.9em;
+        }
+        
+        .stats-list {
+            list-style: none;
+        }
+        
+        .stats-list li {
+            padding: 12px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .stats-list li:last-child {
+            border-bottom: none;
+        }
+        
+        .danger { color: #e74c3c; }
+        .success { color: #27ae60; }
+        .warning { color: #f39c12; }
+        
+        button {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            margin-top: 15px;
+            transition: all 0.3s;
+        }
+        
+        button:hover {
+            background: #764ba2;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .progress-bar {
+            background: #eee;
+            height: 10px;
+            border-radius: 5px;
+            overflow: hidden;
+            margin-top: 10px;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            transition: width 0.3s;
+        }
+        
+        .loading { opacity: 0.5; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🛡️ GUARDIAN DASHBOARD</h1>
+            <p>Monitor profesional de enfoque y bloqueo de distracciones</p>
+            
+            <div class="status">
+                <div class="status-card">
+                    <h3>Estado</h3>
+                    <div class="value" id="status">---</div>
+                </div>
+                <div class="status-card">
+                    <h3>Bloques Hoy</h3>
+                    <div class="value" id="blocks">0</div>
+                </div>
+                <div class="status-card">
+                    <h3>Puntos</h3>
+                    <div class="value" id="points">0</div>
+                </div>
+                <div class="status-card">
+                    <h3>Streak</h3>
+                    <div class="value" id="streak">0 días</div>
+                </div>
+            </div>
+        </header>
+        
+        <div class="gamification">
+            <h2>🎮 Tu Progreso</h2>
+            <div>
+                <p><strong>Nivel:</strong> <span id="level">1</span></p>
+                <p style="margin-top: 10px;"><strong>Progreso:</strong></p>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill" style="width: 0%;"></div>
+                </div>
+            </div>
+            <div class="badges" id="badges"></div>
+        </div>
+        
+        <div class="grid">
+            <div class="card">
+                <h2>📊 Bloques por Hora</h2>
+                <canvas id="hourlyChart"></canvas>
+            </div>
+            
+            <div class="card">
+                <h2>📈 Apps Más Bloqueadas</h2>
+                <canvas id="appsChart"></canvas>
+            </div>
+            
+            <div class="card">
+                <h2>⚡ Riesgo de Distracción</h2>
+                <div id="riskLevel" style="font-size: 2em; font-weight: bold; margin: 20px 0;">---</div>
+                <div id="riskScore" style="font-size: 1.2em;"></div>
+                <button onclick="getAnalysis()">🤖 Analizar Patrones</button>
+            </div>
+            
+            <div class="card">
+                <h2>⏰ Horarios Recomendados</h2>
+                <ul class="stats-list">
+                    <li>
+                        <span>✅ Mejores horas</span>
+                        <span id="bestHours">---</span>
+                    </li>
+                    <li>
+                        <span>❌ Horas peligrosas</span>
+                        <span id="worstHours">---</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        const API_URL = 'http://127.0.0.1:5000/api';
+        
+        async function fetchData(endpoint) {
+            try {
+                const response = await fetch(`${API_URL}${endpoint}`);
+                return await response.json();
+            } catch (e) {
+                console.error('Error:', e);
+                return null;
+            }
+        }
+        
+        async function updateDashboard() {
+            // Status
+            const status = await fetchData('/status');
+            if (status) {
+                document.getElementById('status').textContent = status.enabled ? '🟢 ACTIVO' : '🔴 INACTIVO';
+            }
+            
+            // Stats
+            const stats = await fetchData('/stats');
+            if (stats) {
+                document.getElementById('blocks').textContent = stats.total_blocks_today;
+            }
+            
+            // Daily stats
+            const daily = await fetchData('/stats/daily');
+            if (daily) {
+                updateCharts(daily);
+            }
+            
+            // Gamification
+            // Nota: necesitaría endpoint adicional en API
+            document.getElementById('level').textContent = '1';
+            document.getElementById('progressFill').style.width = '25%';
+        }
+        
+        async function updateCharts(daily) {
+            const hourData = daily.hourly || {};
+            const appData = daily.apps_blocked || {};
+            
+            // Hourly Chart
+            const hourCtx = document.getElementById('hourlyChart').getContext('2d');
+            new Chart(hourCtx, {
+                type: 'line',
+                data: {
+                    labels: Object.keys(hourData),
+                    datasets: [{
+                        label: 'Bloques por hora',
+                        data: Object.values(hourData),
+                        borderColor: '#667eea',
+                        backgroundColor: 'rgba(102, 126, 234, 0.1)',
+                        tension: 0.4,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } }
+                }
+            });
+            
+            // Apps Chart
+            const appsCtx = document.getElementById('appsChart').getContext('2d');
+            const topApps = Object.entries(appData)
+                .sort((a, b) => b[1] - a[1])
+                .slice(0, 5);
+            
+            new Chart(appsCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: topApps.map(a => a[0].replace('.exe', '')),
+                    datasets: [{
+                        data: topApps.map(a => a[1]),
+                        backgroundColor: ['#667eea', '#764ba2', '#f093fb', '#4facfe', '#00f2fe']
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false
+                }
+            });
+        }
+        
+        async function getAnalysis() {
+            alert('🤖 Análisis: Abre la aplicación para ver análisis detallado con IA');
+        }
+        
+        // Actualizar cada 5 segundos
+        updateDashboard();
+        setInterval(updateDashboard, 5000);
+    </script>
+</body>
+</html>
+"""
+
+def get_dashboard_html():
+    """Retorna el HTML del dashboard."""
+    return DASHBOARD_HTML
+
+def save_dashboard(filepath="dashboard.html"):
+    """Guarda el dashboard HTML en un archivo."""
+    with open(filepath, 'w', encoding='utf-8') as f:
+        f.write(DASHBOARD_HTML)
+    return True
