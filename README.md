@@ -48,14 +48,14 @@ Guardian Study nace con la intención de crear una herramienta simple, efectiva 
 
 🔧 Instalación
 
-(Completar según el stack de tu proyecto — binarios, instalador, comandos, etc.)
+En el .zip, aparecera un archivo .exe, ejecutalo. Si aparece alguna alerta, no te preocupes, es normal.
 
 
 ---
 
 📁 Tecnologías utilizadas
 
-(Incluye aquí el lenguaje, frameworks o librerías que uses.)
+Python y HTML5
 
 
 ---
@@ -81,5 +81,5 @@ Consulta el archivo CONTRIBUTING.md para más detalles.
 
 📜 Licencia
 
-Este proyecto está bajo la licencia MIT (o la que corresponda). Eres libre de usarlo, modificarlo y distribuirlo respetando sus términos.
+Este proyecto está bajo la licencia MIT . Eres libre de usarlo, modificarlo y distribuirlo respetando sus términos.
 
