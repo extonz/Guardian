@@ -7,7 +7,13 @@ Concentración real, sin distracciones.
 Guardian Study (o simplemente Guardian) es una aplicación open-source diseñada para ayudarte a mantener el enfoque bloqueando aplicaciones distractoras y creando un espacio de trabajo libre de interrupciones. Ideal para estudiantes, profesionales o cualquier persona que quiera mejorar su productividad.
 
 
----
+🔧 Instalación
+
+En el .zip, aparecera un archivo .exe, ejecutalo. Si aparece alguna alerta, no te preocupes, es normal. 
+
+DISCLAIMER; Todos los archivos que aparecen el zip, son y podran ser MODIFICADOS y re organizados a tu manera, solo procura mirar los nombres de variables y archivos 🤗. 
+Todos los archivos son "esenciales" puedes probar a eliminarlos o modificarlos, pero no voy a garantizar un funcionamiento optimo de la app. 
+
 
 ✨ Características principales
 
@@ -46,9 +52,6 @@ Guardian Study nace con la intención de crear una herramienta simple, efectiva 
 
 ---
 
-🔧 Instalación
-
-En el .zip, aparecera un archivo .exe, ejecutalo. Si aparece alguna alerta, no te preocupes, es normal.
 
 
 ---
@@ -82,4 +85,8 @@ Consulta el archivo CONTRIBUTING.md para más detalles.
 📜 Licencia
 
 Este proyecto está bajo la licencia MIT . Eres libre de usarlo, modificarlo y distribuirlo respetando sus términos.
+
+
+
+PD: Antes de que me venga alguien a criticar, cabe aclarar que se ha usado IA's como Copilot y ChatGPT (https://chatgpt.com/) para algunas funcionalidades de la app, con eso dicho, disfruta de Guardian!!
 
