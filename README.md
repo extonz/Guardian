@@ -1,92 +1,297 @@
-# Guardian
+# 🛡️ Guardian - Sistema de Bienestar Digital
 
-🛡️ Guardian Study
+[![Python 3.8+](https://img.shields.io/badge/Python-3.8+-blue.svg)](https://www.python.org/downloads/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![Status: Active](https://img.shields.io/badge/Status-Active-green.svg)]()
 
-Concentración real, sin distracciones.
+## 📋 Descripción
 
-Guardian Study (o simplemente Guardian) es una aplicación open-source diseñada para ayudarte a mantener el enfoque bloqueando aplicaciones distractoras y creando un espacio de trabajo libre de interrupciones. Ideal para estudiantes, profesionales o cualquier persona que quiera mejorar su productividad.
+**Guardian** es un sistema integral de monitoreo y bienestar digital diseñado para mejorar la productividad y la salud digital. Bloquea aplicaciones distractoras, analiza patrones de comportamiento y proporciona insights personalizados para mantener el enfoque.
 
+## ✨ Características Principales
 
-🔧 Instalación
+### 🎨 Interfaz Moderna
+- Dashboard profesional con 5 pestañas
+- Diseño moderno con gradientes
+- Componentes visuales personalizados
+- Temas personalizables (Dark, Light, Ocean)
 
-En el .zip, aparecera un archivo .exe, ejecutalo. Si aparece alguna alerta, no te preocupes, es normal. 
+### 📊 Análisis Avanzado
+- Score automático de productividad (0-100)
+- Análisis de patrones diarios/semanales
+- Identificación de horas pico de distracción
+- Insights personalizados automáticos
 
-DISCLAIMER; Todos los archivos que aparecen el zip, son y podran ser MODIFICADOS y re organizados a tu manera, solo procura mirar los nombres de variables y archivos 🤗. 
-Todos los archivos son "esenciales" puedes probar a eliminarlos o modificarlos, pero no voy a garantizar un funcionamiento optimo de la app. 
+### ❤️ Monitoreo de Salud
+- Score de salud digital (0-100)
+- Recomendaciones automáticas
+- Tracking de tiempo de pantalla
+- Alertas de postura
 
+### ⏱️ Productividad
+- Timer Pomodoro configurable
+- Recordatorios inteligentes de descanso
+- Gestor de sesiones de trabajo
+- Historial de actividad
 
-✨ Características principales
+### 🏆 Gamificación
+- Sistema de 6 logros desbloqueables
+- Tracking de racha
+- Badges y notificaciones
+- Motivación visual
 
-🚫 Bloqueo de aplicaciones distractoras
+## 🚀 Inicio Rápido
 
-Activa Guardian y las aplicaciones que elijas (juegos, redes sociales, plataformas de vídeo, etc.) quedarán bloqueadas automáticamente.
-Si intentas abrir una de estas apps, Guardian mostrará una alerta y evitará que puedan usarse.
+### Requisitos
+- Python 3.8+
+- tkinter (incluido en Python)
 
-🔔 Alertas al abrir y cerrar apps
+### Instalación
 
-Cada vez que entres o salgas de una aplicación distractiva mientras Guardian está activo, recibirás un aviso que te recuerda tu objetivo: mantener la concentración.
+```bash
+# Clonar el repositorio
+git clone https://github.com/tu-usuario/guardian.git
+cd guardian
 
-🧘 Modo Zen
+# Instalar dependencias
+pip install -r requirements.txt
+```
 
-Un modo de enfoque absoluto.
-Al activarlo:
+### Uso
 
-La pantalla se vuelve negra.
+**Opción 1: Nueva UI Moderna**
+```bash
+python ui/modern_ui.py
+```
 
-Aparece un temporizador de cuenta atrás.
+**Opción 2: Demostración Interactiva**
+```bash
+python demo_new_features.py
+```
 
-No puedes interactuar con el resto del sistema hasta que acabe el tiempo.
+**Opción 3: Menú Interactivo**
+```bash
+python quick_start.py
+```
 
-Si lo necesitas, puedes desbloquearlo manualmente presionando ESC.
+**Opción 4: Interfaz Original**
+```bash
+python main.py
+```
 
+## 📁 Estructura del Proyecto
 
-Perfecto para sesiones Pomodoro o para trabajar profundamente sin interrupciones.
+```
+guardian/
+├── src/                          # Código fuente principal
+│   ├── core/                    # Motor central
+│   │   ├── monitor.py          # Monitoreo de apps
+│   │   ├── utils.py            # Utilidades base
+│   │   └── window_detector.py  # Detector de ventanas
+│   ├── features/               # Funcionalidades
+│   │   ├── gamification.py     # Sistema de logros
+│   │   ├── ml_analyzer.py      # Análisis ML
+│   │   ├── reports.py          # Generador de reportes
+│   │   ├── scheduler.py        # Planificador
+│   │   ├── zen_mode.py         # Modo zen
+│   │   ├── enhanced_ui.py      # UI avanzada (NUEVO)
+│   │   └── advanced_analytics.py # Análisis avanzado (NUEVO)
+│   ├── integrations/           # Integraciones
+│   │   ├── api.py             # API REST
+│   │   ├── dashboard.py       # Dashboard
+│   │   ├── import_export.py   # Import/Export
+│   │   └── notifications.py   # Notificaciones
+│   ├── security/              # Seguridad
+│   │   ├── blocker.py        # Sistema de bloqueo
+│   │   ├── security.py       # Detección de seguridad
+│   │   └── whitelist.py      # Lista blanca
+│   ├── notifications/         # Sistema de alertas
+│   │   └── alert_system.py   # Sistema de alertas
+│   └── utils/                # Utilidades
+│       ├── config.py         # Configuración
+│       ├── logger.py         # Logger
+│       ├── settings_manager.py # Gestor de configuración
+│       └── advanced_utilities.py # Utilidades avanzadas (NUEVO)
+├── ui/                        # Interfaz de usuario
+│   ├── modern_ui.py          # UI moderna (NUEVO)
+│   └── dashboard.html        # Dashboard web
+├── docs/                      # Documentación
+│   ├── README.md             # Este archivo
+│   ├── INSTALL.md            # Guía de instalación
+│   ├── FEATURES.md           # Lista de características
+│   ├── API.md                # Documentación de API
+│   └── CONTRIBUTING.md       # Guía de contribución
+├── tests/                     # Pruebas
+│   └── test_*.py            # Archivos de test
+├── data/                      # Datos de la aplicación
+│   └── .gitkeep             # Placeholder
+├── main.py                    # Punto de entrada
+├── requirements.txt           # Dependencias Python
+├── .gitignore                # Archivos ignorados por git
+├── LICENSE                    # Licencia del proyecto
+└── CHANGELOG.md              # Historial de cambios
+```
 
+## 📖 Documentación
+
+- [📘 Guía de Instalación](docs/INSTALL.md)
+- [✨ Lista de Características](docs/FEATURES.md)
+- [🔌 Documentación de API](docs/API.md)
+- [🤝 Guía de Contribución](docs/CONTRIBUTING.md)
+- [📝 Changelog](CHANGELOG.md)
+
+## 🎯 Nuevas Funciones (v2.0)
+
+### 1. UI Moderna Rediseñada
+```python
+from src.features.enhanced_ui import ModernButton, StatCard, FocusTimer
+
+# Dashboard con 5 pestañas
+# Timer Pomodoro integrado
+# Monitor de salud en tiempo real
+```
+
+### 2. Análisis Avanzado
+```python
+from src.features.advanced_analytics import ProductivityAnalyzer, HealthMonitor
+
+analyzer = ProductivityAnalyzer()
+analyzer.record_block("YouTube")
+score = analyzer.get_productivity_score()
+```
+
+### 3. Utilidades Avanzadas
+```python
+from src.utils.advanced_utilities import AchievementSystem, SessionManager
+
+achievements = AchievementSystem()
+sessions = SessionManager()
+```
+
+## 📊 Estadísticas del Proyecto
+
+- **Líneas de código**: +1,757 (nuevas funciones)
+- **Componentes UI**: 7
+- **Análisis automáticos**: 4
+- **Utilidades avanzadas**: 6
+- **Logros desbloqueables**: 6
+
+## 🔧 Configuración
+
+### Archivo: `guardian_settings.json`
+```json
+{
+  "blocked_apps": ["TikTok", "Instagram"],
+  "whitelist_domains": ["github.com", "stackoverflow.com"],
+  "pomodoro_minutes": 25,
+  "break_minutes": 5,
+  "daily_limit_minutes": 480
+}
+```
+
+## 🔐 Seguridad
+
+- Detección de VPN
+- Detección de pantalla dual
+- Detección de máquina virtual
+- Lista blanca de aplicaciones
+- Sistema de bloqueo a nivel de hosts
+
+## 📚 Ejemplos de Uso
+
+### Análisis de Productividad
+```python
+from src.features.advanced_analytics import ProductivityAnalyzer
+
+analyzer = ProductivityAnalyzer()
+
+# Registrar eventos
+analyzer.record_block("YouTube")
+analyzer.record_focus_session(25, quality=0.95)
+
+# Obtener análisis
+stats = analyzer.get_daily_stats()
+score = analyzer.get_productivity_score()
+trends = analyzer.get_weekly_trends()
+
+print(f"Bloques hoy: {stats['blocks_today']}")
+print(f"Score de productividad: {score}/100")
+```
+
+### Sistema de Logros
+```python
+from src.utils.advanced_utilities import AchievementSystem
+
+achievements = AchievementSystem()
+
+# Desbloquear logros
+achievements.unlock_achievement('first_block')
+achievements.unlock_achievement('focus_warrior')
+
+# Ver progreso
+progress = achievements.get_unlock_progress()
+print(f"Progreso: {progress['percentage']:.1f}%")
+```
+
+### Timer Pomodoro
+```python
+from src.features.enhanced_ui import FocusTimer
+
+timer = FocusTimer(work_minutes=25, break_minutes=5)
+
+timer.start()
+# ... trabaja ...
+timer.toggle_session()  # Cambiar a descanso
+```
+
+## 🐛 Reporte de Problemas
+
+Si encuentras un bug:
+1. Ve a [Issues](https://github.com/tu-usuario/guardian/issues)
+2. Crea un nuevo issue con detalles
+3. Incluye los pasos para reproducir
+
+## 🤝 Contribuir
+
+¡Las contribuciones son bienvenidas! Por favor:
+
+1. Fork el proyecto
+2. Crea una rama para tu feature (`git checkout -b feature/AmazingFeature`)
+3. Commit tus cambios (`git commit -m 'Add some AmazingFeature'`)
+4. Push a la rama (`git push origin feature/AmazingFeature`)
+5. Abre un Pull Request
+
+Ver [CONTRIBUTING.md](docs/CONTRIBUTING.md) para más detalles.
+
+## 📝 Licencia
+
+Este proyecto está bajo la Licencia MIT - ve [LICENSE](LICENSE) para más detalles.
+
+## 👨‍💻 Autor
+
+**Noel** - [GitHub](https://github.com/tu-usuario)
+
+## 🙏 Agradecimientos
+
+- Comunidad de Python
+- Inspirado en herramientas de productividad modernas
+- Diseño inspirado en aplicaciones profesionales
+
+## 📞 Contacto
+
+- 📧 Email: tu-email@example.com
+- 🐦 Twitter: [@tuusuario](https://twitter.com/tuusuario)
+- 💬 Discussions: [GitHub Discussions](https://github.com/tu-usuario/guardian/discussions)
+
+## 🗺️ Roadmap
+
+- [ ] Sincronización en la nube
+- [ ] Aplicación móvil
+- [ ] Análisis de IA mejorado
+- [ ] Integración con calendarios
+- [ ] Reportes mensuales detallados
+- [ ] Compatibilidad con más SO
 
 ---
 
-🎯 Objetivo del proyecto
-
-Guardian Study nace con la intención de crear una herramienta simple, efectiva y transparente que apoye hábitos de estudio y trabajo saludable. Todo su código es abierto, accesible y mejorable por la comunidad.
-
-
----
-
-
-
----
-
-📁 Tecnologías utilizadas
-
-Python y HTML5
-
-
----
-
-🤝 Contribuciones
-
-Las contribuciones son más que bienvenidas.
-Puedes ayudar:
-
-Reportando bugs
-
-Proponiendo nuevas ideas
-
-Desarrollando funcionalidades
-
-Mejorando la documentación
-
-
-Consulta el archivo CONTRIBUTING.md para más detalles.
-
-
----
-
-📜 Licencia
-
-Este proyecto está bajo la licencia MIT . Eres libre de usarlo, modificarlo y distribuirlo respetando sus términos.
-
-
-
-PD: Antes de que me venga alguien a criticar, cabe aclarar que se ha usado IA's como Copilot y ChatGPT (https://chatgpt.com/) para algunas funcionalidades de la app, con eso dicho, disfruta de Guardian!!
-
+**¿Te gusta Guardian? ⭐ Dale una estrella en GitHub!**

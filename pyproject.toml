@@ -1,0 +1,61 @@
+[project]
+name = "guardian"
+version = "2.0.0"
+description = "Sistema integral de monitoreo y bienestar digital"
+readme = "README_MAIN.md"
+requires-python = ">=3.8"
+license = {text = "MIT"}
+authors = [
+    {name = "Noel", email = "tu-email@example.com"}
+]
+keywords = ["productivity", "focus", "digital-wellness", "app-blocker"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: End Users/Desktop",
+    "License :: OSI Approved :: MIT License",
+    "Natural Language :: Spanish",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Topic :: Office/Business",
+]
+
+dependencies = [
+    "psutil>=5.9.0",
+    "flask>=2.0.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=6.0",
+    "black>=21.0",
+    "flake8>=3.9",
+    "mypy>=0.900",
+]
+
+[project.urls]
+Homepage = "https://github.com/tu-usuario/guardian"
+Documentation = "https://github.com/tu-usuario/guardian/wiki"
+Repository = "https://github.com/tu-usuario/guardian.git"
+Issues = "https://github.com/tu-usuario/guardian/issues"
+
+[build-system]
+requires = ["setuptools>=45", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.black]
+line-length = 88
+target-version = ['py38']
+
+[tool.mypy]
+python_version = "3.8"
+warn_return_any = true
+warn_unused_configs = true
+ignore_missing_imports = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
