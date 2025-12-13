@@ -10,28 +10,32 @@ LOGS_DIR = "logs"
 
 def ensure_logs_dir():
     """Asegura que la carpeta de logs exista."""
-    if not os.path.exists(LOGS_DIR):
-        os.makedirs(LOGS_DIR)
+    # Deshabilitado: no crear carpeta de logs
+    # if not os.path.exists(LOGS_DIR):
+    #     os.makedirs(LOGS_DIR)
+    pass
 
 def get_log_file():
     """Retorna el archivo de log del día."""
-    ensure_logs_dir()
+    # Deshabilitado: no crear carpeta de logs
+    # ensure_logs_dir()
     date = datetime.now().strftime("%Y-%m-%d")
     return os.path.join(LOGS_DIR, f"guardian_{date}.log")
 
 def log(message, level="INFO"):
     """Guarda un mensaje de log."""
-    ensure_logs_dir()
-    timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    log_file = get_log_file()
+    # Deshabilitado: no crear carpeta de logs
+    # timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    # log_file = get_log_file()
     
-    log_message = f"[{timestamp}] [{level}] {message}"
+    # log_message = f"[{timestamp}] [{level}] {message}"
     
-    try:
-        with open(log_file, 'a', encoding='utf-8') as f:
-            f.write(log_message + "\n")
-    except Exception as e:
-        print(f"Error al escribir log: {e}")
+    # try:
+    #     with open(log_file, 'a', encoding='utf-8') as f:
+    #         f.write(log_message + "\n")
+    # except Exception as e:
+    #     print(f"Error al escribir log: {e}")
+    pass
 
 def log_block(app_name):
     """Registra un bloqueo de app."""
@@ -69,11 +73,13 @@ def read_logs(days=1):
 
 def clear_old_logs(days=7):
     """Borra logs más antiguos de N días."""
-    from datetime import timedelta
-    import os
+    # Deshabilitado: no crear carpeta de logs
+    # from datetime import timedelta
+    # import os
     
-    ensure_logs_dir()
-    cutoff_date = (datetime.now() - timedelta(days=days)).timestamp()
+    # ensure_logs_dir()
+    # cutoff_date = (datetime.now() - timedelta(days=days)).timestamp()
+    return
     
     try:
         for filename in os.listdir(LOGS_DIR):
