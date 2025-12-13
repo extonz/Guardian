@@ -247,7 +247,7 @@ timer.toggle_session()  # Cambiar a descanso
 ## 🐛 Reporte de Problemas
 
 Si encuentras un bug:
-1. Ve a [Issues](https://github.com/tu-usuario/guardian/issues)
+1. Ve a [Issues](https://github.com/extonz/guardian/issues)
 2. Crea un nuevo issue con detalles
 3. Incluye los pasos para reproducir
 
@@ -279,18 +279,9 @@ Este proyecto está bajo la Licencia MIT - ve [LICENSE](LICENSE) para más detal
 
 ## 📞 Contacto
 
-- 📧 Email: tu-email@example.com
-- 🐦 Twitter: [@tuusuario](https://twitter.com/tuusuario)
-- 💬 Discussions: [GitHub Discussions](https://github.com/tu-usuario/guardian/discussions)
-
-## 🗺️ Roadmap
-
-- [ ] Sincronización en la nube
-- [ ] Aplicación móvil
-- [ ] Análisis de IA mejorado
-- [ ] Integración con calendarios
-- [ ] Reportes mensuales detallados
-- [ ] Compatibilidad con más SO
+- 📧 Email: nastasiagar123+support@gmail.com
+- 🐦 Twitter: [@tuusuario](https://twitter.com/extonz)
+- 💬 Discussions: [GitHub Discussions](https://github.com/extonz/guardian/discussions)
 
 ---
 
