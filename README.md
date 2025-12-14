@@ -4,6 +4,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Status: Active](https://img.shields.io/badge/Status-Active-green.svg)]()
 
+If you want to read the English Wiki, go to https://github.com/extonz/Guardian/wiki
 ## 📋 Descripción
 
 **Guardian** es un sistema integral de monitoreo y bienestar digital diseñado para mejorar la productividad y la salud digital. Bloquea aplicaciones distractoras, analiza patrones de comportamiento y proporciona insights personalizados para mantener el enfoque.
