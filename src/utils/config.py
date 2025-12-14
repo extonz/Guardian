@@ -106,10 +106,6 @@ distractor_apps = [
     "BitTorrent.exe",    # BitTorrent client
     "qBittorrent.exe",   # qBittorrent client
     "VLC.exe",          # VLC media player (muy popular para video)
-    "Chrome.exe",       # Navegador Chrome (puede usarse para redes no educativas; bloquear con precaución)
-    "firefox.exe",      # Mozilla Firefox
-    "Opera.exe",        # Opera browser
-    "edge.exe",         # Microsoft Edge
 ]
 
 # Alias para compatibilidad
