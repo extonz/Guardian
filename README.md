@@ -10,11 +10,6 @@
 
 ## ✨ Características Principales
 
-### 🎨 Interfaz Moderna
-- Dashboard profesional con 5 pestañas
-- Diseño moderno con gradientes
-- Componentes visuales personalizados
-- Temas personalizables (Dark, Light, Ocean)
 
 ### 📊 Análisis Avanzado
 - Score automático de productividad (0-100)
@@ -22,17 +17,6 @@
 - Identificación de horas pico de distracción
 - Insights personalizados automáticos
 
-### ❤️ Monitoreo de Salud
-- Score de salud digital (0-100)
-- Recomendaciones automáticas
-- Tracking de tiempo de pantalla
-- Alertas de postura
-
-### ⏱️ Productividad
-- Timer Pomodoro configurable
-- Recordatorios inteligentes de descanso
-- Gestor de sesiones de trabajo
-- Historial de actividad
 
 ### 🏆 Gamificación
 - Sistema de 6 logros desbloqueables
@@ -59,22 +43,17 @@ pip install -r requirements.txt
 
 ### Uso
 
-**Opción 1: Nueva UI Moderna**
-```bash
-python ui/modern_ui.py
-```
-
-**Opción 2: Demostración Interactiva**
+**Opción 1: Demostración Interactiva**
 ```bash
 python demo_new_features.py
 ```
 
-**Opción 3: Menú Interactivo**
+**Opción 2: Menú Interactivo**
 ```bash
 python quick_start.py
 ```
 
-**Opción 4: Interfaz Original**
+**Opción 3: Interfaz Original** ** RECOMENDADA**
 ```bash
 python main.py
 ```
@@ -136,41 +115,12 @@ guardian/
 
 - [📘 Guía de Instalación](docs/INSTALL.md)
 - [✨ Lista de Características](docs/FEATURES.md)
-- [🔌 Documentación de API](docs/API.md)
-- [🤝 Guía de Contribución](docs/CONTRIBUTING.md)
 - [📝 Changelog](CHANGELOG.md)
 
-## 🎯 Nuevas Funciones (v2.0)
-
-### 1. UI Moderna Rediseñada
-```python
-from src.features.enhanced_ui import ModernButton, StatCard, FocusTimer
-
-# Dashboard con 5 pestañas
-# Timer Pomodoro integrado
-# Monitor de salud en tiempo real
-```
-
-### 2. Análisis Avanzado
-```python
-from src.features.advanced_analytics import ProductivityAnalyzer, HealthMonitor
-
-analyzer = ProductivityAnalyzer()
-analyzer.record_block("YouTube")
-score = analyzer.get_productivity_score()
-```
-
-### 3. Utilidades Avanzadas
-```python
-from src.utils.advanced_utilities import AchievementSystem, SessionManager
-
-achievements = AchievementSystem()
-sessions = SessionManager()
-```
 
 ## 📊 Estadísticas del Proyecto
 
-- **Líneas de código**: +1,757 (nuevas funciones)
+- **Líneas de código**: +2,000 
 - **Componentes UI**: 7
 - **Análisis automáticos**: 4
 - **Utilidades avanzadas**: 6
@@ -233,17 +183,6 @@ progress = achievements.get_unlock_progress()
 print(f"Progreso: {progress['percentage']:.1f}%")
 ```
 
-### Timer Pomodoro
-```python
-from src.features.enhanced_ui import FocusTimer
-
-timer = FocusTimer(work_minutes=25, break_minutes=5)
-
-timer.start()
-# ... trabaja ...
-timer.toggle_session()  # Cambiar a descanso
-```
-
 ## 🐛 Reporte de Problemas
 
 Si encuentras un bug:
@@ -261,7 +200,6 @@ Si encuentras un bug:
 4. Push a la rama (`git push origin feature/AmazingFeature`)
 5. Abre un Pull Request
 
-Ver [CONTRIBUTING.md](docs/CONTRIBUTING.md) para más detalles.
 
 ## 📝 Licencia
 
@@ -269,7 +207,7 @@ Este proyecto está bajo la Licencia MIT - ve [LICENSE](LICENSE) para más detal
 
 ## 👨‍💻 Autor
 
-**Noel** - [GitHub](https://github.com/tu-usuario)
+**Noel** *aka: extonz*- [GitHub](https://github.com/extonz)
 
 ## 🙏 Agradecimientos
 
@@ -280,9 +218,17 @@ Este proyecto está bajo la Licencia MIT - ve [LICENSE](LICENSE) para más detal
 ## 📞 Contacto
 
 - 📧 Email: nastasiagar123+support@gmail.com
-- 🐦 Twitter: [@tuusuario](https://twitter.com/extonz)
+- 🐦 Twitter: [@extonz_](https://twitter.com/extonz_)
 - 💬 Discussions: [GitHub Discussions](https://github.com/extonz/guardian/discussions)
 
+---
+
+## DISCLAIMER:
+
+Este proyecto puede contener archivos de codigo hechos por una IA. (ChatGPT, Claude, Grok...) 
+Reconozco este hecho, asi que porfavor, NO me hagais un Issue o una Discussion por este tema. 
+Si es el caso, la borrare. 
+Muchas gracias por la compresion! ❤
 ---
 
 **¿Te gusta Guardian? ⭐ Dale una estrella en GitHub!**
