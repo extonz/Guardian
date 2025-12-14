@@ -513,7 +513,7 @@ def open_logs_panel():
 
 # Configurar ventana principal
 root = tk.Tk()
-root.title("Guardian - Modo Estudio")
+root.title("Guardian")
 root.geometry("800x700")
 root.resizable(True, True)
 
@@ -531,7 +531,7 @@ root.config(bg=bg_dark)
 header_frame = tk.Frame(root, bg=accent_color)
 header_frame.pack(fill=tk.X, padx=0, pady=0)
 
-title_label = tk.Label(header_frame, text="🛡️ GUARDIAN - MODO ESTUDIO", 
+title_label = tk.Label(header_frame, text="🛡️ GUARDIAN", 
                        font=("Segoe UI", 24, "bold"), fg="white", bg=accent_color, pady=20)
 title_label.pack()
 
@@ -628,7 +628,7 @@ update_status("👋 Bienvenido a Guardian v4.0. Presiona 'Iniciar Guardian' para
 
 # Guardar dashboard HTML
 save_dashboard()
-update_status("✓ Dashboard web guardado en dashboard.html")
+update_status("Se ha guardado el dashboard en localhost:8000/dashboard o/y dashboard.html")
 
 # Iniciar API REST en background
 try:
