@@ -11,6 +11,58 @@
         {
             "app": "Discord.exe",
             "timestamp": "2025-12-13T16:45:25.700374"
+        },
+        {
+            "app": "WhatsApp.exe",
+            "timestamp": "2025-12-14T15:17:58.019905"
+        },
+        {
+            "app": "WhatsApp.exe",
+            "timestamp": "2025-12-14T15:17:58.254173"
+        },
+        {
+            "app": "Discord.exe",
+            "timestamp": "2025-12-14T15:39:21.322777"
+        },
+        {
+            "app": "Discord.exe",
+            "timestamp": "2025-12-14T15:39:39.516321"
+        },
+        {
+            "app": "WhatsApp.exe",
+            "timestamp": "2025-12-14T15:40:22.623129"
+        },
+        {
+            "app": "WhatsApp.exe",
+            "timestamp": "2025-12-14T15:40:35.806952"
+        },
+        {
+            "app": "WhatsApp.exe",
+            "timestamp": "2025-12-14T15:40:43.855056"
+        },
+        {
+            "app": "WhatsApp.exe",
+            "timestamp": "2025-12-14T15:40:56.917581"
+        },
+        {
+            "app": "WhatsApp.exe",
+            "timestamp": "2025-12-14T15:41:04.958676"
+        },
+        {
+            "app": "Discord.exe",
+            "timestamp": "2025-12-14T15:43:38.099732"
+        },
+        {
+            "app": "Discord.exe",
+            "timestamp": "2025-12-14T15:43:46.360798"
+        },
+        {
+            "app": "WhatsApp.exe",
+            "timestamp": "2025-12-14T15:49:09.625158"
+        },
+        {
+            "app": "WhatsApp.exe",
+            "timestamp": "2025-12-14T15:50:17.725706"
         }
     ]
 }

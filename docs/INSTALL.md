@@ -3,7 +3,7 @@
 ## Requisitos del Sistema
 
 - **Python**: 3.8 o superior
-- **RAM**: Mínimo 512 MB
+- **RAM**: Mínimo 100 MB   (Guardian es un programa muy ligero)
 - **Disco**: 100 MB disponibles
 - **SO**: Windows, macOS, Linux
 
@@ -12,11 +12,11 @@
 ### 1. Clonar el Repositorio
 
 ```bash
-git clone https://github.com/tu-usuario/guardian.git
+git clone https://github.com/extonz/guardian.git
 cd guardian
 ```
 
-### 2. Crear Entorno Virtual (Recomendado)
+### 2. Crear Entorno Virtual (Opcional)
 
 #### En Windows:
 ```bash
@@ -121,7 +121,7 @@ python quick_start.py
 ```bash
 # Descargar Python desde python.org si no lo tienes
 # Clonar repositorio
-git clone https://github.com/tu-usuario/guardian.git
+git clone https://github.com/extonz/guardian.git
 
 # Crear entorno virtual
 python -m venv venv
@@ -145,7 +145,7 @@ python ui/modern_ui.py
 brew install python@3.9
 
 # Clonar repositorio
-git clone https://github.com/tu-usuario/guardian.git
+git clone https://github.com/extonz/guardian.git
 
 # Crear entorno virtual
 python3 -m venv venv
@@ -168,7 +168,7 @@ sudo apt update
 sudo apt install python3-dev python3-pip python3-tk
 
 # Clonar repositorio
-git clone https://github.com/tu-usuario/guardian.git
+git clone https://github.com/extonz/guardian.git
 
 # Crear entorno virtual
 python3 -m venv venv
@@ -245,6 +245,5 @@ rm -rf guardian
 ## Próximos Pasos
 
 1. ✅ Lee la [Documentación de Características](FEATURES.md)
-2. ✅ Explora el [Código API](API.md)
-3. ✅ Participa en [Discussions](https://github.com/tu-usuario/guardian/discussions)
-4. ✅ Reporta [Issues](https://github.com/tu-usuario/guardian/issues)
+3. ✅ Participa en [Discussions](https://github.com/extonz/guardian/discussions)
+4. ✅ Reporta [Issues](https://github.com/extonz/guardian/issues)

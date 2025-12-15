@@ -221,9 +221,6 @@
                 "BitTorrent.exe",
                 "qBittorrent.exe",
                 "VLC.exe",
-                "firefox.exe",
-                "Opera.exe",
-                "edge.exe",
                 "RobloxPlayer.exe"
             ],
             "enabled_hours": {

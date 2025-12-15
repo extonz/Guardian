@@ -4,12 +4,6 @@
 
 ### 🎨 Interfaz de Usuario
 
-#### Dashboard Moderno
-- Dashboard principal con estadísticas en tiempo real
-- 5 pestañas principales (Dashboard, Focus, Health, Insights, Settings)
-- Diseño responsivo y profesional
-- Temas personalizables
-
 #### Componentes Visuales
 - Botones modernos con hover
 - Tarjetas de estadísticas
@@ -34,13 +28,6 @@
 
 ### ❤️ Monitoreo de Salud Digital
 
-#### Health Score
-- Score de salud (0-100)
-- Cálculo basado en:
-  - Tiempo de pantalla
-  - Frecuencia de descansos
-  - Ergonomía y postura
-  - Balance trabajo-descanso
 
 #### Recomendaciones Automáticas
 - Sugerencias dinámicas de descanso
@@ -50,20 +37,6 @@
 
 ### ⏱️ Productividad y Tiempo
 
-#### Timer Pomodoro Avanzado
-- Configurable (25 min trabajo, 5 min descanso)
-- Alternancia automática
-- Display en tiempo real
-- Personalizable por usuario
-
-#### Recordatorios de Descanso
-- Sistema inteligente de recordatorios
-- Sugerencias variadas:
-  - 💧 Beber agua
-  - 👀 Descansar vista
-  - 🧘 Respirar profundamente
-  - 🚶 Caminar
-  - 🎵 Escuchar música
 
 #### Gestor de Sesiones
 - Crear sesiones de trabajo
@@ -82,6 +55,8 @@
 5. **🦉 Búho Nocturno** - Trabaja 3h después de 10 PM
 6. **🐦 Madrugador** - Trabaja 3h antes de 7 AM
 
+PD: Los logros NO funcionan aún, gracias por la comprension :)
+
 #### Tracking de Progreso
 - Contador de logros desbloqueados
 - Porcentaje de progreso
@@ -96,18 +71,6 @@
 - Tracking de leídas/no leídas
 - Historial de notificaciones
 - Badges automáticos
-
-### 🎨 Temas Personalizables
-
-#### Temas Predefinidos
-- **Dark** - Tema oscuro profesional
-- **Light** - Tema claro minimalista
-- **Ocean** - Tema azul marino
-
-#### Personalización
-- Colores configurables
-- Fácil de extender
-- Colores consistentes en toda la app
 
 ### 🔐 Seguridad
 
@@ -202,10 +165,8 @@
     "python.org",
     "google.com"
   ],
-  "pomodoro_minutes": 25,
-  "break_minutes": 5,
   "warning_time_seconds": 3,
-  "check_interval": 1,
+  "check_interval": 5,
   "daily_limit_minutes": 480,
   "enable_notifications": true,
   "enable_sounds": true,
@@ -218,11 +179,11 @@
 | Característica | Windows | macOS | Linux |
 |---|---|---|---|
 | Monitoreo de Apps | ✅ | ✅ | ✅ |
-| Bloqueo de Sitios | ✅ | ✅ | ✅ |
+| Bloqueo de Sitios | ❌ | ❌ | ❌ | (mantenimiento de funcion)
 | Notificaciones | ✅ | ✅ | ✅ |
 | Dashboard UI | ✅ | ✅ | ✅ |
 | Dashboard Web | ✅ | ✅ | ✅ |
-| VPN Detection | ✅ | ✅ | ✅ |
+| VPN Detection | ✅ | ✅ | ❌ |
 | Pantalla Dual | ✅ | ✅ | ✅ |
 
 ## Teclas de Atajo (Próximamente)
@@ -248,6 +209,6 @@
 - [ ] Análisis de IA mejorado
 - [ ] Integración con Google Calendar
 - [ ] Reportes mensuales avanzados
-- [ ] Compatibilidad con más SO
+- [✅ ] Compatibilidad con más SO
 - [ ] Soporte para múltiples idiomas
 - [ ] Plugin para navegadores

@@ -2,15 +2,12 @@
 
 ¡Gracias por tu interés en contribuir a Guardian! Aquí está cómo puedes ayudar.
 
-## Código de Conducta
-
-Por favor, sé respetuoso con otros contribuidores. Consulta [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) para más detalles.
 
 ## Cómo Contribuir
 
 ### Reportar Bugs
 
-1. Ve a [Issues](https://github.com/tu-usuario/guardian/issues)
+1. Ve a [Issues](https://github.com/extonz/guardian/issues)
 2. Haz clic en "New Issue"
 3. Usa el template de bug report
 4. Incluye:
@@ -22,7 +19,7 @@ Por favor, sé respetuoso con otros contribuidores. Consulta [CODE_OF_CONDUCT.md
 
 ### Proponer Mejoras
 
-1. Ve a [Discussions](https://github.com/tu-usuario/guardian/discussions)
+1. Ve a [Discussions](https://github.com/extonz/guardian/discussions)
 2. Crea una nueva discussion
 3. Describe la mejora y por qué sería útil
 
@@ -30,7 +27,7 @@ Por favor, sé respetuoso con otros contribuidores. Consulta [CODE_OF_CONDUCT.md
 
 1. **Fork el repositorio**
    ```bash
-   git clone https://github.com/tu-usuario/guardian.git
+   git clone https://github.com/extonz/guardian.git
    cd guardian
    ```
 
@@ -171,7 +168,7 @@ Al contribuir, aceptas que tus cambios serán licenciados bajo MIT License.
 ## Preguntas
 
 Si tienes preguntas:
-- Abre una [Discussion](https://github.com/tu-usuario/guardian/discussions)
+- Abre una [Discussion](https://github.com/extonz/guardian/discussions)
 - Contacta al autor
 - Revisa la documentación existente
 
