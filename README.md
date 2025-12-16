@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="https://share.creavite.co/6941b2f007e523c90b19fd8c.gif" width="450">
+</p>
+
 # 🛡️ Guardian - Sistema de Bienestar Digital
 
 [![Python 3.8+](https://img.shields.io/badge/Python-3.8+-blue.svg)](https://www.python.org/downloads/)
