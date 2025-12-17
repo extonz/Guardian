@@ -48,6 +48,37 @@
 - Rastreo automático de sesiones de trabajo
 - Estadísticas de sesiones recientes
 - Mejores sesiones registradas
+
+### 🎨 UI Profesional (v5.1+ ✨ NUEVO)
+- Interfaz oscura moderna (dark theme)
+- Diálogos personalizados profesionales
+- Sin componentes predeterminados de Windows
+- Tema de colores consistente (cyan/verde/naranja)
+- Iconografía con emojis mejorada
+
+### 👤 Gestión de Perfiles (v5.1+ ✨ NUEVO)
+- Crear múltiples perfiles de usuario
+- Configuración independiente por perfil
+- Guardar/cargar perfiles persistentes
+- Perfil por defecto incluido
+
+### ✅ Whitelist Avanzada (v5.1+ ✨ NUEVO)
+- Permitir aplicaciones específicas
+- Permitir sitios web específicos
+- Gestor dual (Apps + Websites)
+- Persistencia en JSON
+
+### ⏰ Gestor de Horarios (v5.1+ ✨ NUEVO)
+- Configurar horario de trabajo
+- Duración de descansos personalizables
+- Sincronización automática
+- Activación por hora
+
+### 🧘 Modo Zen (v5.1+ ✨ NUEVO)
+- Activación de modo enfoque total
+- Duración configurable
+- Silencia todas las notificaciones
+- Ambiente limpio para concentrarse
 - Racha de productividad
 
 ### 🏆 Gamificación
@@ -79,6 +110,57 @@ pip install -r requirements.txt
 # Ejecutar Guardian (RECOMENDADO)
 python main.py
 ```
+
+## 🎮 Guía de la Interfaz v5.1+
+
+### Pantalla Principal
+
+**Fila 1 - Controles Principales:**
+- **▶ Iniciar** - Inicia el monitoreo de Guardian
+- **⏹ Detener** - Detiene el monitoreo
+- **📊 Estadísticas** - Ver análisis de productividad
+- **🚨 Alertas** - Ver alertas inteligentes
+- **🎯 Metas** - Gestionar metas diarias
+- **📈 Exportar** - Exportar reportes
+
+**Fila 2 - Funciones Avanzadas:**
+- **👤 Perfiles** - Crear y gestionar múltiples perfiles
+- **✅ Whitelist** - Permitir apps/sitios específicos
+- **⏰ Horario** - Configurar horario de trabajo
+- **🧘 Zen Mode** - Activar modo enfoque total
+- **📋 Reportes** - Ver análisis detallados
+
+### Uso de Funcionalidades v5.1+
+
+#### 👤 Gestión de Perfiles
+1. Haz clic en "👤 Perfiles"
+2. Selecciona un perfil o crea uno nuevo
+3. Personaliza configuración por perfil
+4. Los cambios se guardan automáticamente en `config/profiles.json`
+
+#### ✅ Whitelist Manager
+1. Haz clic en "✅ Whitelist"
+2. Elige entre "Aplicaciones" o "Sitios Web"
+3. Agrega URLs o nombres de aplicaciones
+4. Los cambios se guardan en `config/whitelist.json`
+
+#### ⏰ Gestor de Horarios
+1. Haz clic en "⏰ Horario"
+2. Configura hora de inicio y fin (HH:MM)
+3. Establece duración de descansos en minutos
+4. Haz clic en "Guardar"
+
+#### 🧘 Modo Zen
+1. Haz clic en "🧘 Zen Mode"
+2. Ingresa duración en minutos
+3. Haz clic en "Activar"
+4. Disfruta del enfoque total
+
+#### 📋 Reportes Detallados
+1. Haz clic en "📋 Reportes"
+2. Visualiza análisis de 7 días
+3. Lee recomendaciones personalizadas
+4. Exporta si es necesario
 
 ## 📁 Estructura del Proyecto
 
