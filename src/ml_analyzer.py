@@ -1,22 +1,22 @@
-"""
-Análisis de patrones de distracción con ML básico.
-Predice cuándo es más probable distraerse.
+﻿"""
+AnÃ¡lisis de patrones de distracciÃ³n con ML bÃ¡sico.
+Predice cuÃ¡ndo es mÃ¡s probable distraerse.
 """
 
 from datetime import datetime, timedelta
-from src.utils.settings_manager import load_stats
+from src.settings_manager import load_stats
 from collections import defaultdict
 import statistics
 
 def analyze_distraction_patterns():
-    """Analiza patrones de cuándo ocurren distracciones."""
+    """Analiza patrones de cuÃ¡ndo ocurren distracciones."""
     stats = load_stats()
     blocks = stats.get('blocks', [])
     
     if not blocks:
         return None
     
-    # Agrupar por hora del día
+    # Agrupar por hora del dÃ­a
     hourly_blocks = defaultdict(int)
     for block in blocks:
         try:
@@ -26,7 +26,7 @@ def analyze_distraction_patterns():
         except:
             continue
     
-    # Agrupar por día de la semana
+    # Agrupar por dÃ­a de la semana
     daily_blocks = defaultdict(int)
     for block in blocks:
         try:
@@ -50,7 +50,7 @@ def analyze_distraction_patterns():
     }
 
 def predict_distraction_risk():
-    """Predice el riesgo de distracción en la hora actual."""
+    """Predice el riesgo de distracciÃ³n en la hora actual."""
     patterns = analyze_distraction_patterns()
     if not patterns:
         return 'bajo', 50
@@ -93,7 +93,7 @@ def get_best_focus_times():
     return best_hours
 
 def get_worst_focus_times():
-    """Retorna las peores horas para enfocarse (más distracciones)."""
+    """Retorna las peores horas para enfocarse (mÃ¡s distracciones)."""
     patterns = analyze_distraction_patterns()
     if not patterns or not patterns['hourly']:
         return None
@@ -104,7 +104,7 @@ def get_worst_focus_times():
     return worst_hours
 
 def get_app_correlation(app_name):
-    """Analiza qué apps suelen estar abiertas cuando se abre una app bloqueada."""
+    """Analiza quÃ© apps suelen estar abiertas cuando se abre una app bloqueada."""
     stats = load_stats()
     blocks = stats.get('blocks', [])
     
@@ -114,7 +114,7 @@ def get_app_correlation(app_name):
     if not app_blocks:
         return {}
     
-    # Esto sería más complejo con datos reales
+    # Esto serÃ­a mÃ¡s complejo con datos reales
     return {'total_blocks': len(app_blocks)}
 
 def suggest_strategy():
@@ -126,14 +126,15 @@ def suggest_strategy():
     suggestions = []
     
     if score >= 75:
-        suggestions.append("⚠️ Riesgo MUY ALTO - Considera tomar un descanso")
+        suggestions.append("âš ï¸ Riesgo MUY ALTO - Considera tomar un descanso")
     elif score >= 50:
-        suggestions.append("⚠️ Riesgo ALTO - Sé extra cuidadoso")
+        suggestions.append("âš ï¸ Riesgo ALTO - SÃ© extra cuidadoso")
     
     if best_times:
-        suggestions.append(f"✅ Mejores horarios: {':'.join([f'{h:02d}:00' for h in sorted(best_times)])}")
+        suggestions.append(f"âœ… Mejores horarios: {':'.join([f'{h:02d}:00' for h in sorted(best_times)])}")
     
     if worst_times:
-        suggestions.append(f"❌ Horarios peligrosos: {':'.join([f'{h:02d}:00' for h in sorted(worst_times)])}")
+        suggestions.append(f"âŒ Horarios peligrosos: {':'.join([f'{h:02d}:00' for h in sorted(worst_times)])}")
     
     return suggestions
+

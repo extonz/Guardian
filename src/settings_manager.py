@@ -1,12 +1,12 @@
-"""
-Gestor de configuración y persistencia de datos.
-Guarda/carga settings, listas de apps, estadísticas, etc.
+﻿"""
+Gestor de configuraciÃ³n y persistencia de datos.
+Guarda/carga settings, listas de apps, estadÃ­sticas, etc.
 """
 
 import json
 import os
 from datetime import datetime
-from src.utils.config import BLOCKED_APPS
+from src.config import BLOCKED_APPS
 
 SETTINGS_FILE = "guardian_settings.json"
 STATS_FILE = "guardian_stats.json"
@@ -25,7 +25,7 @@ DEFAULT_SETTINGS = {
         "default": {
             "name": "Por Defecto",
             "blocked_apps": BLOCKED_APPS,
-            "enabled_hours": {"start": 0, "end": 24},  # 0-24 = todo el día
+            "enabled_hours": {"start": 0, "end": 24},  # 0-24 = todo el dÃ­a
         },
         "estudio": {
             "name": "Modo Estudio",
@@ -113,18 +113,18 @@ def get_whitelist():
     return settings['whitelist_apps']
 
 def set_password(password):
-    """Guarda una contraseña para proteger Guardian."""
+    """Guarda una contraseÃ±a para proteger Guardian."""
     settings = load_settings()
     settings['password'] = password
     save_settings(settings)
 
 def verify_password(password):
-    """Verifica si la contraseña es correcta."""
+    """Verifica si la contraseÃ±a es correcta."""
     settings = load_settings()
     return settings['password'] == password
 
 def log_block_event(app_name, timestamp=None):
-    """Registra un evento de bloqueo en las estadísticas."""
+    """Registra un evento de bloqueo en las estadÃ­sticas."""
     if timestamp is None:
         timestamp = datetime.now().isoformat()
     
@@ -140,7 +140,7 @@ def log_block_event(app_name, timestamp=None):
     save_stats(stats)
 
 def load_stats():
-    """Carga las estadísticas."""
+    """Carga las estadÃ­sticas."""
     if os.path.exists(STATS_FILE):
         try:
             with open(STATS_FILE, 'r', encoding='utf-8') as f:
@@ -151,7 +151,7 @@ def load_stats():
     return {"blocks": []}
 
 def save_stats(stats):
-    """Guarda las estadísticas."""
+    """Guarda las estadÃ­sticas."""
     try:
         with open(STATS_FILE, 'w', encoding='utf-8') as f:
             json.dump(stats, f, indent=4, ensure_ascii=False)
@@ -161,7 +161,7 @@ def save_stats(stats):
         return False
 
 def get_session_stats():
-    """Retorna estadísticas de la sesión actual."""
+    """Retorna estadÃ­sticas de la sesiÃ³n actual."""
     stats = load_stats()
     blocks = stats.get('blocks', [])
     
@@ -169,7 +169,7 @@ def get_session_stats():
     today = datetime.now().strftime("%Y-%m-%d")
     today_blocks = [b for b in blocks if b['timestamp'].startswith(today)]
     
-    # Apps más bloqueadas
+    # Apps mÃ¡s bloqueadas
     app_counts = {}
     for block in today_blocks:
         app = block['app']
@@ -199,3 +199,4 @@ def get_profiles():
     """Obtiene todos los perfiles."""
     settings = load_settings()
     return settings['profiles']
+

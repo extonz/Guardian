@@ -1,21 +1,21 @@
-"""
-Módulo para detectar ventanas abiertas actualmente en Windows.
+﻿"""
+MÃ³dulo para detectar ventanas abiertas actualmente en Windows.
 Detecta apps realmente visibles/activas, no solo procesos en background.
 """
 
 import pygetwindow as gw
-from src.utils.config import BLOCKED_APPS
+from src.config import BLOCKED_APPS
 
 def get_open_windows():
     """
     Obtiene todas las ventanas abiertas actualmente.
-    Retorna una lista de tuplas (título, nombre_proceso)
+    Retorna una lista de tuplas (tÃ­tulo, nombre_proceso)
     """
     windows = []
     try:
         all_windows = gw.getAllWindows()
         for window in all_windows:
-            # Filtrar ventanas sin título o minimizadas
+            # Filtrar ventanas sin tÃ­tulo o minimizadas
             if window.title and not window.isMinimized:
                 windows.append({
                     'title': window.title,
@@ -29,7 +29,7 @@ def get_open_windows():
 def find_blocked_apps():
     """
     Busca apps bloqueadas entre las ventanas abiertas.
-    Retorna lista de apps bloqueadas que están abiertas.
+    Retorna lista de apps bloqueadas que estÃ¡n abiertas.
     """
     open_windows = get_open_windows()
     blocked_found = []
@@ -40,7 +40,7 @@ def find_blocked_apps():
         for app in BLOCKED_APPS:
             app_name = app.lower().replace('.exe', '')
             
-            # Buscar coincidencia en el título de la ventana
+            # Buscar coincidencia en el tÃ­tulo de la ventana
             if app_name in window_title or app.lower() in window_title:
                 if window_title not in [b['title'].lower() for b in blocked_found]:
                     blocked_found.append({
@@ -54,7 +54,7 @@ def find_blocked_apps():
 def get_active_window():
     """
     Obtiene la ventana actualmente activa/en foco.
-    Retorna el título de la ventana o None.
+    Retorna el tÃ­tulo de la ventana o None.
     """
     try:
         active = gw.getActiveWindow()
@@ -67,7 +67,7 @@ def get_active_window():
 
 def is_blocked_app_active():
     """
-    Verifica si una app bloqueada está actualmente activa (en foco).
+    Verifica si una app bloqueada estÃ¡ actualmente activa (en foco).
     Retorna el nombre de la app bloqueada o None.
     """
     active_window = get_active_window()
@@ -82,3 +82,4 @@ def is_blocked_app_active():
             return app
     
     return None
+

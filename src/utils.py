@@ -1,10 +1,10 @@
-import psutil
+﻿import psutil
 import time
 import threading
-from src.utils.config import BLOCKED_APPS, WARNING_TIME
-from src.core.window_detector import find_blocked_apps, is_blocked_app_active
-from src.utils.settings_manager import get_whitelist, log_block_event
-from src.utils.logger import log_block, log_close, log_info
+from src.config import BLOCKED_APPS, WARNING_TIME
+from src.window_detector import find_blocked_apps, is_blocked_app_active
+from src.settings_manager import get_whitelist, log_block_event
+from src.logger import log_block, log_close, log_info
 try:
     from playsound import playsound
 except Exception:
@@ -25,7 +25,7 @@ def alert_and_kill(app_name, alert_sound_path, countdown=10, ui_callback=None):
     """
     def countdown_thread():
         for i in range(countdown, 0, -1):
-            message = f"[Guardian] '{app_name}' se cerrará en {i} segundos..."
+            message = f"[Guardian] '{app_name}' se cerrarÃ¡ en {i} segundos..."
             print(message)
             if ui_callback:
                 ui_callback(message)
@@ -53,23 +53,24 @@ def alert_and_kill(app_name, alert_sound_path, countdown=10, ui_callback=None):
 def check_blocked_apps(alert_sound_path, countdown=3, ui_callback=None):
     """
     Revisa las apps bloqueadas ABIERTAS (ventanas visibles).
-    Solo detecta apps que realmente están abiertas, no procesos en background.
+    Solo detecta apps que realmente estÃ¡n abiertas, no procesos en background.
     Respeta la whitelist de excepciones.
     """
     blocked_apps_open = find_blocked_apps()
     whitelist = get_whitelist()
     
     for app_info in blocked_apps_open:
-        # Verificar si está en whitelist
+        # Verificar si estÃ¡ en whitelist
         if any(w.lower() in app_info['title'].lower() for w in whitelist):
             continue
         
-        # Verificar si la app está en foco (activa)
+        # Verificar si la app estÃ¡ en foco (activa)
         if app_info['isActive']:
             alert_and_kill(app_info['app'], alert_sound_path, countdown, ui_callback)
         else:
-            # Si no está en foco, mostrar advertencia
-            message = f"⚠️ Aplicación bloqueada detectada (background): {app_info['title']}"
+            # Si no estÃ¡ en foco, mostrar advertencia
+            message = f"âš ï¸ AplicaciÃ³n bloqueada detectada (background): {app_info['title']}"
             if ui_callback:
                 ui_callback(message)
             print(message)
+

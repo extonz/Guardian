@@ -1,4 +1,4 @@
-# whitelist.py
+﻿# whitelist.py
 ALLOWED_DOMAINS = [
     {"domain": "classroom.google.com", "type": "exact"},
     {"domain": "moodle.org", "type": "subdomain"},
@@ -50,11 +50,11 @@ import requests
 import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
-from src.utils.settings_manager import load_settings, save_settings
+from src.settings_manager import load_settings, save_settings
 from datetime import datetime
 
 def setup_telegram(bot_token, chat_id):
-    """Configura integración con Telegram."""
+    """Configura integraciÃ³n con Telegram."""
     settings = load_settings()
     if 'notifications' not in settings:
         settings['notifications'] = {}
@@ -67,7 +67,7 @@ def setup_telegram(bot_token, chat_id):
     save_settings(settings)
 
 def send_telegram_message(message):
-    """Envía mensaje por Telegram."""
+    """EnvÃ­a mensaje por Telegram."""
     settings = load_settings()
     telegram = settings.get('notifications', {}).get('telegram', {})
     
@@ -86,7 +86,7 @@ def send_telegram_message(message):
         return False, str(e)
 
 def setup_discord(webhook_url):
-    """Configura integración con Discord."""
+    """Configura integraciÃ³n con Discord."""
     settings = load_settings()
     if 'notifications' not in settings:
         settings['notifications'] = {}
@@ -98,7 +98,7 @@ def setup_discord(webhook_url):
     save_settings(settings)
 
 def send_discord_message(message, title="Guardian Alert"):
-    """Envía mensaje por Discord."""
+    """EnvÃ­a mensaje por Discord."""
     settings = load_settings()
     discord = settings.get('notifications', {}).get('discord', {})
     
@@ -118,3 +118,4 @@ def send_discord_message(message, title="Guardian Alert"):
         return response.status_code in [200, 204], "Enviado a Discord"
     except Exception as e:
         return False, str(e)
+

@@ -1,9 +1,9 @@
-import time
+﻿import time
 
-from src.core.utils import check_blocked_apps
-from src.utils.config import CHECK_INTERVAL
+from src.utils import check_blocked_apps
+from src.config import CHECK_INTERVAL
 
-ALERT_SOUND = "alerta.mp3"  # Guarda aquí el mp3 descargado desde MyInstants
+ALERT_SOUND = "alerta.mp3"  # Guarda aquÃ­ el mp3 descargado desde MyInstants
 
 def monitor_apps(ui_callback=None):
     print("Monitor de apps bloqueadas iniciado...")
@@ -13,3 +13,4 @@ def monitor_apps(ui_callback=None):
 
 if __name__ == "__main__":
     monitor_apps()
+

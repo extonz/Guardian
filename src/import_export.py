@@ -1,5 +1,5 @@
-"""
-Sistema de importación/exportación de configuración.
+﻿"""
+Sistema de importaciÃ³n/exportaciÃ³n de configuraciÃ³n.
 Importar apps desde CSV, exportar backups, etc.
 """
 
@@ -7,7 +7,7 @@ import csv
 import json
 import os
 from datetime import datetime
-from src.utils.settings_manager import load_settings, save_settings, get_blocked_apps, add_blocked_app
+from src.settings_manager import load_settings, save_settings, get_blocked_apps, add_blocked_app
 
 def export_apps_csv(filename='guardian_apps_export.csv'):
     """Exporta lista de apps bloqueadas a CSV."""
@@ -44,7 +44,7 @@ def import_apps_csv(filename='apps.csv'):
         return False, f"Error importando: {e}"
 
 def export_settings_backup(filename=None):
-    """Crea backup de toda la configuración."""
+    """Crea backup de toda la configuraciÃ³n."""
     if filename is None:
         filename = f"guardian_backup_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json"
     
@@ -57,7 +57,7 @@ def export_settings_backup(filename=None):
         return False, f"Error guardando backup: {e}"
 
 def import_settings_backup(filename):
-    """Restaura configuración desde backup."""
+    """Restaura configuraciÃ³n desde backup."""
     try:
         if not os.path.exists(filename):
             return False, f"Archivo {filename} no encontrado"
@@ -66,12 +66,12 @@ def import_settings_backup(filename):
             settings = json.load(f)
         
         save_settings(settings)
-        return True, "Configuración restaurada"
+        return True, "ConfiguraciÃ³n restaurada"
     except Exception as e:
         return False, f"Error restaurando: {e}"
 
 def export_profile_config(profile_name, filename=None):
-    """Exporta configuración de un perfil específico."""
+    """Exporta configuraciÃ³n de un perfil especÃ­fico."""
     if filename is None:
         filename = f"profile_{profile_name}.json"
     
@@ -89,7 +89,7 @@ def export_profile_config(profile_name, filename=None):
         return False, f"Error exportando perfil: {e}"
 
 def import_profile_config(profile_name, filename):
-    """Importa configuración para un perfil."""
+    """Importa configuraciÃ³n para un perfil."""
     try:
         if not os.path.exists(filename):
             return False, f"Archivo {filename} no encontrado"
@@ -106,7 +106,7 @@ def import_profile_config(profile_name, filename):
         return False, f"Error importando perfil: {e}"
 
 def create_share_code(profile_name):
-    """Crea un código para compartir configuración (base64 encoded)."""
+    """Crea un cÃ³digo para compartir configuraciÃ³n (base64 encoded)."""
     try:
         import base64
         settings = load_settings()
@@ -119,10 +119,10 @@ def create_share_code(profile_name):
         
         return True, code
     except Exception as e:
-        return False, f"Error creando código: {e}"
+        return False, f"Error creando cÃ³digo: {e}"
 
 def import_share_code(profile_name, code):
-    """Importa configuración desde código compartido."""
+    """Importa configuraciÃ³n desde cÃ³digo compartido."""
     try:
         import base64
         json_data = base64.b64decode(code.encode()).decode()
@@ -132,6 +132,7 @@ def import_share_code(profile_name, code):
         settings['profiles'][profile_name] = profile_data
         save_settings(settings)
         
-        return True, f"Perfil {profile_name} importado desde código"
+        return True, f"Perfil {profile_name} importado desde cÃ³digo"
     except Exception as e:
-        return False, f"Error importando código: {e}"
+        return False, f"Error importando cÃ³digo: {e}"
+

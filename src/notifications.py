@@ -1,11 +1,11 @@
-"""
-Módulo de notificaciones: Telegram y Discord (webhook).
+﻿"""
+MÃ³dulo de notificaciones: Telegram y Discord (webhook).
 Provee configuraciones y funciones para enviar mensajes.
 """
 
 import requests
 from typing import Tuple
-from src.utils.settings_manager import load_settings, save_settings
+from src.settings_manager import load_settings, save_settings
 
 
 def setup_telegram(bot_token: str, chat_id: str) -> Tuple[bool, str]:
@@ -64,3 +64,4 @@ def send_discord_message(message: str, title: str = "Guardian Alert", timeout: i
         return (r.status_code in (200, 204), f"HTTP {r.status_code}")
     except Exception as e:
         return False, str(e)
+

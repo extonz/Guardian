@@ -1,14 +1,14 @@
-"""
-Sistema de gamificación: badges, streaks, puntos, logros.
+﻿"""
+Sistema de gamificaciÃ³n: badges, streaks, puntos, logros.
 Motiva al usuario a mantener el foco.
 """
 
 from datetime import datetime, timedelta
-from src.utils.settings_manager import load_settings, save_settings
+from src.settings_manager import load_settings, save_settings
 import json
 
 def get_or_create_gamification():
-    """Crea/obtiene datos de gamificación."""
+    """Crea/obtiene datos de gamificaciÃ³n."""
     settings = load_settings()
     if 'gamification' not in settings:
         settings['gamification'] = {
@@ -34,7 +34,7 @@ def add_points(amount):
     return settings['gamification']
 
 def update_streak():
-    """Actualiza el streak de días consecutivos sin distracciones."""
+    """Actualiza el streak de dÃ­as consecutivos sin distracciones."""
     settings = load_settings()
     gamif = settings['gamification']
     today = datetime.now().strftime("%Y-%m-%d")
@@ -70,18 +70,18 @@ def unlock_badge(badge_name):
 def get_available_badges():
     """Retorna todos los badges disponibles."""
     return {
-        'novice': {'name': '👶 Novato', 'description': 'Completar primer día', 'requirement': lambda: True},
-        'week_warrior': {'name': '⚔️ Guerrero Semanal', 'description': 'Mantener 7 días de streak', 'requirement': lambda: get_streak() >= 7},
-        'month_master': {'name': '👑 Maestro Mensual', 'description': '30 días de streak', 'requirement': lambda: get_streak() >= 30},
-        'focus_demon': {'name': '😈 Demonio del Enfoque', 'description': '100 horas de enfoque', 'requirement': lambda: get_total_hours() >= 100},
-        'blocker_king': {'name': '🚫 Rey del Bloqueo', 'description': 'Bloquear 1000 apps', 'requirement': lambda: True},
-        'midnight_warrior': {'name': '🌙 Guerrero Nocturno', 'description': 'Sesión de 2AM', 'requirement': lambda: datetime.now().hour >= 2},
-        'marathon': {'name': '🏃 Maratón', 'description': '8 horas de enfoque', 'requirement': lambda: True},
-        'perfectionist': {'name': '✨ Perfeccionista', 'description': 'Sin interrupciones en 1 hora', 'requirement': lambda: True},
+        'novice': {'name': 'ðŸ‘¶ Novato', 'description': 'Completar primer dÃ­a', 'requirement': lambda: True},
+        'week_warrior': {'name': 'âš”ï¸ Guerrero Semanal', 'description': 'Mantener 7 dÃ­as de streak', 'requirement': lambda: get_streak() >= 7},
+        'month_master': {'name': 'ðŸ‘‘ Maestro Mensual', 'description': '30 dÃ­as de streak', 'requirement': lambda: get_streak() >= 30},
+        'focus_demon': {'name': 'ðŸ˜ˆ Demonio del Enfoque', 'description': '100 horas de enfoque', 'requirement': lambda: get_total_hours() >= 100},
+        'blocker_king': {'name': 'ðŸš« Rey del Bloqueo', 'description': 'Bloquear 1000 apps', 'requirement': lambda: True},
+        'midnight_warrior': {'name': 'ðŸŒ™ Guerrero Nocturno', 'description': 'SesiÃ³n de 2AM', 'requirement': lambda: datetime.now().hour >= 2},
+        'marathon': {'name': 'ðŸƒ MaratÃ³n', 'description': '8 horas de enfoque', 'requirement': lambda: True},
+        'perfectionist': {'name': 'âœ¨ Perfeccionista', 'description': 'Sin interrupciones en 1 hora', 'requirement': lambda: True},
     }
 
 def check_and_unlock_badges():
-    """Verifica y desbloquea badges automáticamente."""
+    """Verifica y desbloquea badges automÃ¡ticamente."""
     gamif = get_or_create_gamification()
     badges = get_available_badges()
     new_badges = []
@@ -123,7 +123,7 @@ def add_focus_time(minutes):
     save_settings(settings)
 
 def get_gamification_status():
-    """Retorna estado completo de gamificación."""
+    """Retorna estado completo de gamificaciÃ³n."""
     gamif = get_or_create_gamification()
     badges_dict = get_available_badges()
     
@@ -140,3 +140,4 @@ def get_gamification_status():
         'badges': badge_info,
         'progress_to_next_level': (gamif['points'] % 1000) / 10,  # 0-100%
     }
+

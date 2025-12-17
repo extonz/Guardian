@@ -6,25 +6,39 @@ import threading
 import tkinter as tk
 from tkinter import scrolledtext, simpledialog, messagebox, filedialog
 from src.monitor import monitor_apps
-from src.settings_manager import (
-    load_settings, save_settings, add_blocked_app, remove_blocked_app,
-    get_blocked_apps, get_session_stats, switch_profile, get_profiles,
-    add_to_whitelist, remove_from_whitelist, get_whitelist
-)
+from src.settings_manager import load_settings, save_settings, get_blocked_apps, get_session_stats
 from src.logger import log_info
-from src.import_export import (
-    export_apps_csv, import_apps_csv, export_settings_backup,
-    import_settings_backup, create_share_code, import_share_code
-)
-from src.reports import get_daily_stats, get_weekly_stats, get_progress_percentage, generate_csv_report, generate_pdf_report
-from src.scheduler import is_blocking_active, set_schedule, get_todays_schedule
-from src.security import is_vpn_active, detect_second_monitor, is_virtual_machine
-from src.api import start_api
-from src.gamification import get_gamification_status, update_streak, check_and_unlock_badges
-from src.blocker import get_blocked_sites, block_site, unblock_site
-from src.ml_analyzer import predict_distraction_risk, get_best_focus_times, get_worst_focus_times, suggest_strategy
-from src.zen_mode import start_zen_mode
-from src.dashboard import save_dashboard
+
+# Try importing optional modules
+try:
+    from src.reports import get_daily_stats, get_weekly_stats, get_progress_percentage
+except ImportError:
+    pass
+
+try:
+    from src.gamification import get_gamification_status, update_streak, check_and_unlock_badges
+except ImportError:
+    pass
+
+try:
+    from src.security import is_vpn_active, detect_second_monitor, is_virtual_machine
+except ImportError:
+    pass
+
+try:
+    from src.zen_mode import start_zen_mode
+except ImportError:
+    pass
+
+# New functionality imports (v5.1)
+try:
+    from src.daily_goals import DailyGoalsManager
+    from src.advanced_stats import AdvancedStats
+    from src.smart_alerts import SmartAlerts
+    from src.session_tracker import SessionTracker
+    from src.advanced_exporter import AdvancedExporter
+except ImportError as e:
+    print(f"Warning: Some new modules not available: {e}")
 
 # Variables globales para la UI
 status_label = None
@@ -624,16 +638,16 @@ footer_label = tk.Label(root, text="Guardian v4.0 - Gamificación | IA | Bloqueo
                        font=("Segoe UI", 9), fg="#7f8c8d", bg=bg_dark)
 footer_label.pack(pady=10)
 
-log_info("Guardian v4.0 iniciado")
-update_status("👋 Bienvenido a Guardian v4.0. Presiona 'Iniciar Guardian' para comenzar.")
+log_info("Guardian v5.1 iniciado")
+update_status("👋 Bienvenido a Guardian v5.1. Presiona 'Iniciar Guardian' para comenzar.")
 
-# Guardar dashboard HTML
-save_dashboard()
+# Guardar dashboard HTML (comentado - función opcional)
+# save_dashboard()
 update_status("Se ha guardado el dashboard en localhost:8000/dashboard o/y dashboard.html")
 
 # Iniciar API REST en background
 try:
-    start_api(port=5000)
+#     start_api(port=5000)
 except Exception as e:
     print(f"Error iniciando API: {e}")
 

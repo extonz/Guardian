@@ -1,14 +1,14 @@
-"""
-Sistema de reportes y estadísticas avanzadas.
-Genera reportes PDF, gráficos, comparativas.
+﻿"""
+Sistema de reportes y estadÃ­sticas avanzadas.
+Genera reportes PDF, grÃ¡ficos, comparativas.
 """
 
 from datetime import datetime, timedelta
-from src.utils.settings_manager import load_stats
+from src.settings_manager import load_stats
 import json
 
 def get_daily_stats(date=None):
-    """Obtiene estadísticas de un día específico."""
+    """Obtiene estadÃ­sticas de un dÃ­a especÃ­fico."""
     if date is None:
         date = datetime.now().strftime("%Y-%m-%d")
     
@@ -31,7 +31,7 @@ def get_daily_stats(date=None):
     }
 
 def get_weekly_stats():
-    """Obtiene estadísticas de la última semana."""
+    """Obtiene estadÃ­sticas de la Ãºltima semana."""
     stats = []
     for i in range(7):
         date = (datetime.now() - timedelta(days=i)).strftime("%Y-%m-%d")
@@ -39,7 +39,7 @@ def get_weekly_stats():
     return stats
 
 def get_monthly_stats():
-    """Obtiene estadísticas del mes actual."""
+    """Obtiene estadÃ­sticas del mes actual."""
     stats = []
     today = datetime.now()
     for i in range(today.day):
@@ -48,7 +48,7 @@ def get_monthly_stats():
     return stats
 
 def get_top_blocked_apps(days=7):
-    """Obtiene las apps más bloqueadas en los últimos N días."""
+    """Obtiene las apps mÃ¡s bloqueadas en los Ãºltimos N dÃ­as."""
     stats = load_stats()
     blocks = stats.get('blocks', [])
     
@@ -136,7 +136,7 @@ def generate_pdf_report(filename, days=7):
         elements = []
         styles = getSampleStyleSheet()
         
-        # Título
+        # TÃ­tulo
         title_style = ParagraphStyle(
             'CustomTitle',
             parent=styles['Heading1'],
@@ -144,7 +144,7 @@ def generate_pdf_report(filename, days=7):
             textColor=colors.HexColor('#3498db'),
             spaceAfter=30
         )
-        elements.append(Paragraph("📊 Reporte Guardian", title_style))
+        elements.append(Paragraph("ðŸ“Š Reporte Guardian", title_style))
         elements.append(Spacer(1, 0.3*inch))
         
         # Datos de la semana
@@ -176,16 +176,17 @@ def generate_pdf_report(filename, days=7):
         doc.build(elements)
         return True
     except ImportError:
-        print("⚠️ Para generar PDF requiere: pip install reportlab")
+        print("âš ï¸ Para generar PDF requiere: pip install reportlab")
         return False
     except Exception as e:
         print(f"Error generando PDF: {e}")
         return False
 
 def get_progress_percentage():
-    """Calcula el porcentaje de reducción de distracciones."""
+    """Calcula el porcentaje de reducciÃ³n de distracciones."""
     week_ago = datetime.now() - timedelta(days=7)
     two_weeks_ago = datetime.now() - timedelta(days=14)
     
     comparison = get_usage_comparison(two_weeks_ago, week_ago)
     return max(0, comparison['improvement'])
+

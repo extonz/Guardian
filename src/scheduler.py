@@ -1,13 +1,13 @@
-"""
+﻿"""
 Sistema de horarios de bloqueo.
-Permite horarios específicos para cada día y perfil.
+Permite horarios especÃ­ficos para cada dÃ­a y perfil.
 """
 
 from datetime import datetime, time
-from src.utils.settings_manager import load_settings, save_settings
+from src.settings_manager import load_settings, save_settings
 
 def is_blocking_active():
-    """Verifica si el bloqueo debe estar activo según el horario."""
+    """Verifica si el bloqueo debe estar activo segÃºn el horario."""
     settings = load_settings()
     profile = settings['current_profile']
     
@@ -21,7 +21,7 @@ def is_blocking_active():
 
 def set_schedule(profile, day, start_hour, end_hour):
     """
-    Configura horario de bloqueo para un día específico.
+    Configura horario de bloqueo para un dÃ­a especÃ­fico.
     day: "monday", "tuesday", ... "sunday"
     """
     settings = load_settings()
@@ -62,8 +62,8 @@ def get_all_schedules(profile):
 
 def set_time_limit(app_name, minutes_per_day):
     """
-    Permite usar una app X minutos por día.
-    Después cierra automáticamente.
+    Permite usar una app X minutos por dÃ­a.
+    DespuÃ©s cierra automÃ¡ticamente.
     """
     settings = load_settings()
     
@@ -79,7 +79,7 @@ def set_time_limit(app_name, minutes_per_day):
     save_settings(settings)
 
 def get_time_limit(app_name):
-    """Obtiene el límite de tiempo de una app."""
+    """Obtiene el lÃ­mite de tiempo de una app."""
     settings = load_settings()
     return settings.get('time_limits', {}).get(app_name, None)
 
@@ -105,3 +105,4 @@ def reset_daily_usage():
         settings['time_limits'][app]['last_reset'] = datetime.now().isoformat()
     
     save_settings(settings)
+
