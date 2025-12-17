@@ -314,7 +314,9 @@ Este proyecto está bajo la Licencia MIT - ve [LICENSE](LICENSE)
 
 ## 📢 DISCLAIMER
 
-Este proyecto puede contener código generado por IA (ChatGPT, Claude, Grok, etc.). Reconozco este hecho. Si tienes dudas sobre esto, no abras un issue, es completamente normal.
+Este proyecto puede contener código generado por IA (ChatGPT, Claude, Grok, etc.). Reconozco este hecho. Si tienes dudas sobre esto, no abras un issue, es completamente normal. 
+
+Tambien use codigo open source de GitHub, si eres dueño de algun codigo y lo reconoces en este proyecto, no dudes en contactarme por redes sociales o E-Mail. Lo solucionaremos :) 
 
 ---
 
