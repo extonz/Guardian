@@ -114,7 +114,7 @@
     "countdown_seconds": 3,
     "check_interval": 5,
     "enabled": true,
-    "current_profile": "estudio",
+    "current_profile": "default",
     "profiles": {
         "default": {
             "name": "Por Defecto",
@@ -221,10 +221,7 @@
                 "BitTorrent.exe",
                 "qBittorrent.exe",
                 "VLC.exe",
-                "Chrome.exe",
-                "firefox.exe",
-                "Opera.exe",
-                "edge.exe"
+                "RobloxPlayer.exe"
             ],
             "enabled_hours": {
                 "start": 0,
@@ -461,14 +458,5 @@
                 "end": 17
             }
         }
-    },
-    "gamification": {
-        "points": 0,
-        "level": 1,
-        "streak_days": 0,
-        "last_streak_date": null,
-        "badges": [],
-        "achievements": [],
-        "total_focus_hours": 0
     }
 }
