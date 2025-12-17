@@ -5,26 +5,26 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import threading
 import tkinter as tk
 from tkinter import scrolledtext, simpledialog, messagebox, filedialog
-from src.core.monitor import monitor_apps
-from src.utils.settings_manager import (
+from src.monitor import monitor_apps
+from src.settings_manager import (
     load_settings, save_settings, add_blocked_app, remove_blocked_app,
     get_blocked_apps, get_session_stats, switch_profile, get_profiles,
     add_to_whitelist, remove_from_whitelist, get_whitelist
 )
-from src.utils.logger import log_info
-from src.integrations.import_export import (
+from src.logger import log_info
+from src.import_export import (
     export_apps_csv, import_apps_csv, export_settings_backup,
     import_settings_backup, create_share_code, import_share_code
 )
-from src.features.reports import get_daily_stats, get_weekly_stats, get_progress_percentage, generate_csv_report, generate_pdf_report
-from src.features.scheduler import is_blocking_active, set_schedule, get_todays_schedule
-from src.security.security import is_vpn_active, detect_second_monitor, is_virtual_machine
-from src.integrations.api import start_api
-from src.features.gamification import get_gamification_status, update_streak, check_and_unlock_badges
-from src.security.blocker import get_blocked_sites, block_site, unblock_site
-from src.features.ml_analyzer import predict_distraction_risk, get_best_focus_times, get_worst_focus_times, suggest_strategy
-from src.features.zen_mode import start_zen_mode
-from src.integrations.dashboard import save_dashboard
+from src.reports import get_daily_stats, get_weekly_stats, get_progress_percentage, generate_csv_report, generate_pdf_report
+from src.scheduler import is_blocking_active, set_schedule, get_todays_schedule
+from src.security import is_vpn_active, detect_second_monitor, is_virtual_machine
+from src.api import start_api
+from src.gamification import get_gamification_status, update_streak, check_and_unlock_badges
+from src.blocker import get_blocked_sites, block_site, unblock_site
+from src.ml_analyzer import predict_distraction_risk, get_best_focus_times, get_worst_focus_times, suggest_strategy
+from src.zen_mode import start_zen_mode
+from src.dashboard import save_dashboard
 
 # Variables globales para la UI
 status_label = None
@@ -516,6 +516,7 @@ root = tk.Tk()
 root.title("Guardian")
 root.geometry("800x700")
 root.resizable(True, True)
+
 
 # Colores
 bg_dark = "#1e1e2e"
