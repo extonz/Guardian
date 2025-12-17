@@ -8,20 +8,44 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Status: Active](https://img.shields.io/badge/Status-Active-green.svg)]()
 
-If you want to read the English Wiki, go to https://github.com/extonz/Guardian/wiki
 ## 📋 Descripción
 
 **Guardian** es un sistema integral de monitoreo y bienestar digital diseñado para mejorar la productividad y la salud digital. Bloquea aplicaciones distractoras, analiza patrones de comportamiento y proporciona insights personalizados para mantener el enfoque.
 
 ## ✨ Características Principales
 
+### 🎯 Metas Diarias (v5.1 ✨ NUEVO)
+- Establece objetivos de tiempo de enfoque
+- Monitorea límites de distracciones
+- Progreso en tiempo real
+- Alertas cuando alcanzas metas
 
 ### 📊 Análisis Avanzado
 - Score automático de productividad (0-100)
 - Análisis de patrones diarios/semanales
 - Identificación de horas pico de distracción
 - Insights personalizados automáticos
+- Análisis de tendencias de productividad
+- Métricas de bienestar digital
 
+### 🚨 Alertas Inteligentes (v5.1 ✨ NUEVO)
+- Notificaciones contextuales según tu actividad
+- Sugerencias de descansos automáticas
+- Alertas sobre muchas distracciones
+- Recomendaciones de modo Zen
+- Resumen diario de productividad
+
+### 📈 Reportes Exportables (v5.1 ✨ NUEVO)
+- Exporta a JSON, CSV, TXT
+- Reportes semanales con análisis
+- Recomendaciones personalizadas
+- Descarga tu historial completo
+
+### 📚 Historial de Sesiones (v5.1 ✨ NUEVO)
+- Rastreo automático de sesiones de trabajo
+- Estadísticas de sesiones recientes
+- Mejores sesiones registradas
+- Racha de productividad
 
 ### 🏆 Gamificación
 - Sistema de 6 logros desbloqueables
@@ -39,8 +63,8 @@ If you want to read the English Wiki, go to https://github.com/extonz/Guardian/w
 
 ```bash
 # Clonar el repositorio
-git clone https://github.com/tu-usuario/guardian.git
-cd guardian
+git clone https://github.com/extonz/Guardian.git
+cd Guardian
 
 # Instalar dependencias
 pip install -r requirements.txt
@@ -48,99 +72,167 @@ pip install -r requirements.txt
 
 ### Uso
 
-**Opción 1: Demostración Interactiva**
 ```bash
-python demo_new_features.py
-```
-
-**Opción 2: Menú Interactivo**
-```bash
-python quick_start.py
-```
-
-**Opción 3: Interfaz Original** ** RECOMENDADA**
-```bash
+# Ejecutar Guardian (RECOMENDADO)
 python main.py
 ```
 
 ## 📁 Estructura del Proyecto
 
 ```
-guardian/
-├── src/                          # Código fuente principal
-│   ├── core/                    # Motor central
-│   │   ├── monitor.py          # Monitoreo de apps
-│   │   ├── utils.py            # Utilidades base
-│   │   └── window_detector.py  # Detector de ventanas
-│   ├── features/               # Funcionalidades
-│   │   ├── gamification.py     # Sistema de logros
-│   │   ├── ml_analyzer.py      # Análisis ML
-│   │   ├── reports.py          # Generador de reportes
-│   │   ├── scheduler.py        # Planificador
-│   │   ├── zen_mode.py         # Modo zen
-│   │   ├── enhanced_ui.py      # UI avanzada (NUEVO)
-│   │   └── advanced_analytics.py # Análisis avanzado (NUEVO)
-│   ├── integrations/           # Integraciones
-│   │   ├── api.py             # API REST
-│   │   ├── dashboard.py       # Dashboard
-│   │   ├── import_export.py   # Import/Export
-│   │   └── notifications.py   # Notificaciones
-│   ├── security/              # Seguridad
-│   │   ├── blocker.py        # Sistema de bloqueo
-│   │   ├── security.py       # Detección de seguridad
-│   │   └── whitelist.py      # Lista blanca
-│   ├── notifications/         # Sistema de alertas
-│   │   └── alert_system.py   # Sistema de alertas
-│   └── utils/                # Utilidades
-│       ├── config.py         # Configuración
-│       ├── logger.py         # Logger
-│       ├── settings_manager.py # Gestor de configuración
-│       └── advanced_utilities.py # Utilidades avanzadas (NUEVO)
-├── ui/                        # Interfaz de usuario
-│   ├── modern_ui.py          # UI moderna (NUEVO)
-│   └── dashboard.html        # Dashboard web
-├── docs/                      # Documentación
-│   ├── README.md             # Este archivo
-│   ├── INSTALL.md            # Guía de instalación
-│   ├── FEATURES.md           # Lista de características
-│   ├── API.md                # Documentación de API
-│   └── CONTRIBUTING.md       # Guía de contribución
-├── tests/                     # Pruebas
-│   └── test_*.py            # Archivos de test
-├── data/                      # Datos de la aplicación
-│   └── .gitkeep             # Placeholder
-├── main.py                    # Punto de entrada
-├── requirements.txt           # Dependencias Python
-├── .gitignore                # Archivos ignorados por git
-├── LICENSE                    # Licencia del proyecto
-└── CHANGELOG.md              # Historial de cambios
+Guardian/
+├── main.py                      # Punto de entrada principal
+├── src/                         # Código fuente
+│   ├── monitor.py             # Monitoreo de apps
+│   ├── blocker.py             # Sistema de bloqueo
+│   ├── settings_manager.py    # Gestión de configuración
+│   ├── logger.py              # Sistema de logs
+│   ├── reports.py             # Generador de reportes
+│   ├── scheduler.py           # Planificador
+│   ├── gamification.py        # Sistema de logros
+│   ├── zen_mode.py            # Modo zen
+│   ├── security.py            # Detección de seguridad
+│   ├── ml_analyzer.py         # Análisis ML
+│   ├── advanced_stats.py      # Estadísticas avanzadas ✨
+│   ├── daily_goals.py         # Metas diarias ✨
+│   ├── smart_alerts.py        # Alertas inteligentes ✨
+│   ├── session_tracker.py     # Historial de sesiones ✨
+│   ├── advanced_exporter.py   # Exportación avanzada ✨
+│   ├── ui/
+│   │   ├── modern_ui.py
+│   │   └── dashboard.html
+│   ├── examples/
+│   └── tools/
+├── config/                     # Configuración
+│   ├── guardian_settings.json
+│   ├── guardian_stats.json
+│   └── daily_goals.json
+├── data/                       # Datos
+│   └── sessions_history.json
+├── docs/                       # Documentación
+│   ├── CHANGELOG.md
+│   ├── FEATURES.md
+│   └── INSTALL.md
+├── requirements.txt            # Dependencias
+├── LICENSE                     # Licencia MIT
+└── README.md                   # Este archivo
 ```
 
-## 📖 Documentación
+## 🎯 Nuevas Funcionalidades (v5.1)
 
-- [📘 Guía de Instalación](docs/INSTALL.md)
-- [✨ Lista de Características](docs/FEATURES.md)
-- [📝 Changelog](CHANGELOG.md)
+### 1️⃣ Metas Diarias
+```python
+from src.daily_goals import DailyGoalsManager
 
+goals = DailyGoalsManager()
+
+# Establecer metas
+goals.set_goal("focus_time", 120)      # 120 minutos de enfoque
+goals.set_goal("blocks_limit", 10)     # Máximo 10 bloqueos
+
+# Verificar progreso
+progress = goals.check_goal_progress(daily_stats)
+print(f"Progreso enfoque: {progress['focus_time']['percentage']}%")
+```
+
+### 2️⃣ Estadísticas Avanzadas
+```python
+from src.advanced_stats import AdvancedStats
+
+stats = AdvancedStats()
+
+# Tendencias de productividad
+trend = stats.get_productivity_trend(days=7)
+print(f"Tendencia: {trend['trend']}")
+
+# Mejores horas del día
+best_hours = stats.get_best_focus_hours()
+print(f"Mejor hora: {best_hours[0]}")
+
+# Patrones de distracción
+patterns = stats.get_distraction_patterns()
+print(f"Apps más distractoras: {patterns['most_distracting_apps']}")
+
+# Métricas de bienestar
+health = stats.get_health_metrics()
+```
+
+### 3️⃣ Alertas Inteligentes
+```python
+from src.smart_alerts import SmartAlerts
+
+alerts = SmartAlerts()
+
+# Alertas de productividad
+prod_alerts = alerts.check_productivity_alerts(stats)
+
+# Alerta de bienestar
+wellness = alerts.get_wellness_alert(stats)
+
+# Resumen diario
+summary = alerts.get_daily_summary_alert(stats)
+
+for alert in prod_alerts:
+    print(alerts.format_alert_message(alert))
+```
+
+### 4️⃣ Historial de Sesiones
+```python
+from src.session_tracker import SessionTracker
+
+tracker = SessionTracker()
+
+# Iniciar sesión de trabajo
+tracker.start_session("work")
+# ... trabaja ...
+tracker.end_session()
+
+# Obtener estadísticas
+session_stats = tracker.get_session_stats(days=7)
+print(f"Sesiones esta semana: {session_stats['sessions_count']}")
+
+# Mejores sesiones
+best = tracker.get_best_sessions(limit=5)
+
+# Insights
+insights = tracker.get_session_insights()
+```
+
+### 5️⃣ Exportación Avanzada
+```python
+from src.advanced_exporter import AdvancedExporter
+
+exporter = AdvancedExporter()
+
+# Exportar en múltiples formatos
+json_file = exporter.export_to_json(data, "reporte")
+csv_file = exporter.export_to_csv(data_list, "sesiones")
+txt_file = exporter.export_to_txt(content, "resumen")
+
+# Generar reporte semanal automático
+weekly = exporter.generate_weekly_report(stats_data)
+print(f"Reporte guardado: {weekly}")
+```
 
 ## 📊 Estadísticas del Proyecto
 
-- **Líneas de código**: +2,000 
-- **Componentes UI**: 7
-- **Análisis automáticos**: 4
-- **Utilidades avanzadas**: 6
+- **Líneas de código**: +2,500
+- **Módulos funcionales**: 20+
+- **Nuevas funcionalidades v5.1**: 5
 - **Logros desbloqueables**: 6
+- **Formatos de exportación**: 3 (JSON, CSV, TXT)
 
 ## 🔧 Configuración
 
-### Archivo: `guardian_settings.json`
+### Archivo: `config/guardian_settings.json`
 ```json
 {
-  "blocked_apps": ["TikTok", "Instagram"],
+  "blocked_apps": ["TikTok", "Instagram", "YouTube"],
   "whitelist_domains": ["github.com", "stackoverflow.com"],
   "pomodoro_minutes": 25,
   "break_minutes": 5,
-  "daily_limit_minutes": 480
+  "daily_limit_minutes": 480,
+  "zen_mode_enabled": true
 }
 ```
 
@@ -151,39 +243,33 @@ guardian/
 - Detección de máquina virtual
 - Lista blanca de aplicaciones
 - Sistema de bloqueo a nivel de hosts
+- Criptografía de datos sensibles
 
-## 📚 Ejemplos de Uso
+## 📚 Ejemplos Adicionales
 
 ### Análisis de Productividad
 ```python
-from src.features.advanced_analytics import ProductivityAnalyzer
+from src.advanced_analytics import ProductivityAnalyzer
 
 analyzer = ProductivityAnalyzer()
-
-# Registrar eventos
 analyzer.record_block("YouTube")
 analyzer.record_focus_session(25, quality=0.95)
 
-# Obtener análisis
 stats = analyzer.get_daily_stats()
 score = analyzer.get_productivity_score()
-trends = analyzer.get_weekly_trends()
 
+print(f"Score: {score}/100")
 print(f"Bloques hoy: {stats['blocks_today']}")
-print(f"Score de productividad: {score}/100")
 ```
 
 ### Sistema de Logros
 ```python
-from src.utils.advanced_utilities import AchievementSystem
+from src.advanced_utilities import AchievementSystem
 
 achievements = AchievementSystem()
-
-# Desbloquear logros
 achievements.unlock_achievement('first_block')
 achievements.unlock_achievement('focus_warrior')
 
-# Ver progreso
 progress = achievements.get_unlock_progress()
 print(f"Progreso: {progress['percentage']:.1f}%")
 ```
@@ -197,43 +283,39 @@ Si encuentras un bug:
 
 ## 🤝 Contribuir
 
-¡Las contribuciones son bienvenidas! Por favor:
+¡Las contribuciones son bienvenidas!
 
 1. Fork el proyecto
-2. Crea una rama para tu feature (`git checkout -b feature/AmazingFeature`)
-3. Commit tus cambios (`git commit -m 'Add some AmazingFeature'`)
-4. Push a la rama (`git push origin feature/AmazingFeature`)
+2. Crea una rama para tu feature (`git checkout -b feature/NewFeature`)
+3. Commit tus cambios (`git commit -m 'Add NewFeature'`)
+4. Push a la rama (`git push origin feature/NewFeature`)
 5. Abre un Pull Request
-
 
 ## 📝 Licencia
 
-Este proyecto está bajo la Licencia MIT - ve [LICENSE](LICENSE) para más detalles.
+Este proyecto está bajo la Licencia MIT - ve [LICENSE](LICENSE)
 
 ## 👨‍💻 Autor
 
-**Noel** *aka: extonz*- [GitHub](https://github.com/extonz)
+**Noel** *aka: extonz* - [GitHub](https://github.com/extonz)
 
 ## 🙏 Agradecimientos
 
 - Comunidad de Python
 - Inspirado en herramientas de productividad modernas
-- Diseño inspirado en aplicaciones profesionales
+- Todos los contribuidores
 
 ## 📞 Contacto
 
-- 📧 Email: nastasiagar123+support@gmail.com
-- 🐦 Twitter: [@extonz_](https://twitter.com/extonz_)
+- 📧 Email: nastasiagar123@gmail.com
 - 💬 Discussions: [GitHub Discussions](https://github.com/extonz/guardian/discussions)
 
 ---
 
-## DISCLAIMER:
+## 📢 DISCLAIMER
 
-Este proyecto puede contener archivos de codigo hechos por una IA. (ChatGPT, Claude, Grok...) 
-Reconozco este hecho, asi que porfavor, NO me hagais un Issue o una Discussion por este tema. 
-Si es el caso, la borrare. 
-Muchas gracias por la compresion! ❤
+Este proyecto puede contener código generado por IA (ChatGPT, Claude, Grok, etc.). Reconozco este hecho. Si tienes dudas sobre esto, no abras un issue, es completamente normal.
+
 ---
 
-**¿Te gusta Guardian? ⭐ Dale una estrella en GitHub!**
+**¿Te gusta Guardian? ⭐ ¡Dale una estrella en GitHub!**

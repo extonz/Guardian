@@ -6,12 +6,6 @@ Todos los cambios notables en Guardian serán documentados en este archivo.
 
 ### ✨ Agregado
 
-#### UI Completamente Rediseñada
-- Nueva interfaz moderna en `ui/modern_ui.py`
-- Dashboard con 5 pestañas (Dashboard, Focus, Health, Insights, Settings)
-- Diseño profesional con gradientes
-- Componentes visuales personalizados
-
 #### Nuevos Componentes UI (`src/features/enhanced_ui.py`)
 - `ModernButton` - Botones con hover y animación
 - `StatCard` - Tarjetas de estadísticas elegantes
