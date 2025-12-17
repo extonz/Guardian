@@ -4,6 +4,8 @@ __pycache__/
 *$py.class
 guardian_settings.json
 guardian_stats.json
+main.py.bak
+
 # C extensions
 *.so
 
