@@ -1,6 +1,13 @@
 <p align="center">
   <img src="https://share.creavite.co/6941b2f007e523c90b19fd8c.gif" width="450">
 </p>
+<p align="center">
+⭐ Si Guardian te resulta útil, deja una estrella — ayuda mucho al proyecto ⭐ 
+  
+  ![GitHub stars](https://img.shields.io/github/stars/extonz/Guardian?style=social)
+
+</p>
+
 
 # 🛡️ Guardian - Sistema de Bienestar Digital
 
@@ -11,9 +18,24 @@
 > [!IMPORTANT]
 > If you are looking for the english README, go to Wiki of Guardian (https://github.com/extonz/Guardian/wiki)
 
+
+
+
+
+
 ## 📋 Descripción
 
 **Guardian** es un sistema integral de monitoreo y bienestar digital diseñado para mejorar la productividad y la salud digital. Bloquea aplicaciones distractoras, analiza patrones de comportamiento y proporciona insights personalizados para mantener el enfoque.
+
+## 🤔 ¿Por qué Guardian?
+
+A diferencia de otros bloqueadores o trackers de productividad, **Guardian**:
+
+- 🧠 Analiza tu comportamiento, no solo bloquea apps
+- 🎯 Te ayuda a mejorar con metas reales y feedback
+- 🧘 Integra bienestar digital (no solo productividad)
+- 🖥️ Funciona 100% local, sin enviar datos a la nube
+- 🚀 Está pensado como una app profesional, no un script
 
 ## ✨ Características Principales
 
@@ -397,12 +419,14 @@ Este proyecto está bajo la Licencia MIT - ve [LICENSE](LICENSE)
 
 ---
 
-## 📢 DISCLAIMER
 
-Este proyecto puede contener código generado por IA (ChatGPT, Claude, Grok, etc.). Reconozco este hecho. Si tienes dudas sobre esto, no abras un issue, es completamente normal. 
+> [!NOTE]
+> Este proyecto incluye una combinación de desarrollo propio, herramientas de IA (como ChatGPT, Claude o Grok) y código open-source debidamente adaptado.
+> Todo el software se utiliza con fines legítimos y de acuerdo con sus respectivas licencias.
+>   Si consideras que algún fragmento de código te pertenece, puedes contactarme y lo revisaré sin problema.
+a.
 
-Tambien use codigo open source de GitHub, si eres dueño de algun codigo y lo reconoces en este proyecto, no dudes en contactarme por redes sociales o E-Mail. Lo solucionaremos :) 
 
 ---
 
-**¿Te gusta Guardian? ⭐ ¡Dale una estrella en GitHub!**
+**¿Te gusta Guardian? ⭐ ¡Dale una estrella!**
