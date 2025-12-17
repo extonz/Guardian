@@ -7,6 +7,9 @@
 [![Python 3.8+](https://img.shields.io/badge/Python-3.8+-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Status: Active](https://img.shields.io/badge/Status-Active-green.svg)]()
+  
+> [!IMPORTANT]
+> If you are looking for the english README, go to Wiki of Guardian (https://github.com/extonz/Guardian/wiki)
 
 ## 📋 Descripción
 
@@ -307,7 +310,7 @@ Este proyecto está bajo la Licencia MIT - ve [LICENSE](LICENSE)
 
 ## 📞 Contacto
 
-- 📧 Email: nastasiagar123@gmail.com
+- 📧 Email: nastasiagar123+support@gmail.com
 - 💬 Discussions: [GitHub Discussions](https://github.com/extonz/guardian/discussions)
 
 ---
