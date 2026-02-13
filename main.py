@@ -20,10 +20,19 @@ from pathlib import Path
 try:
     from src.settings_manager import load_settings, save_settings, get_blocked_apps
     from src.logger import log_info
-    from src.monitor import monitor_apps
 except ImportError as e:
     print(f"Error importing core modules: {e}")
     sys.exit(1)
+
+MONITOR_AVAILABLE = True
+try:
+    from src.monitor import monitor_apps
+except Exception as e:
+    MONITOR_AVAILABLE = False
+    print(f"Warning: monitor unavailable ({e}). Running UI without active monitoring.")
+
+    def monitor_apps(*args, **kwargs):
+        return None
 
 # Import new v5.1 features
 try:
@@ -44,17 +53,17 @@ log_text = None
 monitor_running = False
 current_settings = None
 
-# Colors - Professional dark theme
-bg_dark = "#0a0e27"
-bg_light = "#1a1f3a"
-bg_lighter = "#242a45"
-accent_color = "#00d4ff"
-accent_hover = "#00b4d0"
-success_color = "#00ff88"
-warning_color = "#ffaa00"
-danger_color = "#ff3333"
-text_color = "#e0e0e0"
-text_secondary = "#a0a0a0"
+# Colors - Minimal dark theme (flat, no gradients)
+bg_dark = "#101214"
+bg_light = "#171a1f"
+bg_lighter = "#22262d"
+accent_color = "#7dd3fc"
+accent_hover = "#38bdf8"
+success_color = "#86efac"
+warning_color = "#fcd34d"
+danger_color = "#fca5a5"
+text_color = "#e5e7eb"
+text_secondary = "#9ca3af"
 
 # Data directory for profiles and settings
 DATA_DIR = Path("config")
@@ -562,8 +571,11 @@ def start_guardian():
     global monitor_running
     if not monitor_running:
         monitor_running = True
-        update_status("✓ Guardian iniciado - Monitoreando aplicaciones...")
-        threading.Thread(target=monitor_apps, daemon=True).start()
+        if MONITOR_AVAILABLE:
+            update_status("✓ Guardian iniciado - Monitoreando aplicaciones...")
+            threading.Thread(target=monitor_apps, daemon=True).start()
+        else:
+            update_status("⚠ Guardian iniciado sin monitoreo (falta pygetwindow)")
 
 def stop_guardian():
     """Stop Guardian monitoring."""
@@ -690,8 +702,8 @@ def create_main_window():
     global root, status_label, log_text, current_settings
     
     root = tk.Tk()
-    root.title("🛡️ Guardian v5.1 - Sistema de Bienestar Digital")
-    root.geometry("1100x750")
+    root.title("Guardian v5.1 - Bienestar Digital")
+    root.geometry("980x720")
     root.config(bg=bg_dark)
     
     # Set icon if available
@@ -704,86 +716,96 @@ def create_main_window():
     
     current_settings = load_settings()
     
-    # ===== HEADER =====
-    header = tk.Frame(root, bg=accent_color, height=80)
-    header.pack(fill=tk.X, padx=0, pady=0)
+    # ===== HEADER (minimal) =====
+    header = tk.Frame(root, bg=bg_dark, height=74)
+    header.pack(fill=tk.X, padx=18, pady=(16, 8))
     header.pack_propagate(False)
-    
-    title = tk.Label(header, text="🛡️ GUARDIAN v5.1", font=("Segoe UI", 24, "bold"),
-                     fg="white", bg=accent_color)
-    title.pack(pady=10)
-    
-    subtitle = tk.Label(header, text="Sistema Inteligente de Bienestar Digital",
-                        font=("Segoe UI", 10), fg=bg_dark, bg=accent_color)
-    subtitle.pack()
-    
+
+    title = tk.Label(
+        header,
+        text="Guardian",
+        font=("Segoe UI", 25, "bold"),
+        fg=text_color,
+        bg=bg_dark,
+    )
+    title.pack(anchor=tk.W)
+
+    subtitle = tk.Label(
+        header,
+        text="Sistema de bienestar digital local",
+        font=("Segoe UI", 10),
+        fg=text_secondary,
+        bg=bg_dark,
+    )
+    subtitle.pack(anchor=tk.W)
+
     # ===== MAIN CONTENT =====
     main_frame = tk.Frame(root, bg=bg_dark)
-    main_frame.pack(fill=tk.BOTH, expand=True, padx=10, pady=10)
+    main_frame.pack(fill=tk.BOTH, expand=True, padx=18, pady=(0, 14))
     
     # Status
-    status_label = tk.Label(main_frame, text="✓ Guardian listo",
-                           font=("Segoe UI", 11, "bold"), fg=success_color, bg=bg_dark)
+    status_label = tk.Label(main_frame, text="Guardian listo",
+                           font=("Segoe UI", 10, "bold"), fg=success_color, bg=bg_dark)
     status_label.pack(anchor=tk.W, pady=(0, 10))
-    
+
     # Main control buttons - Row 1
     button_frame1 = tk.Frame(main_frame, bg=bg_dark)
     button_frame1.pack(fill=tk.X, pady=5)
     
-    tk.Button(button_frame1, text="▶ Iniciar", bg=success_color, fg=bg_dark,
+    tk.Button(button_frame1, text="Iniciar", bg=bg_lighter, fg=text_color,
               font=("Segoe UI", 11, "bold"), command=start_guardian,
-              relief=tk.FLAT, padx=20, pady=10).pack(side=tk.LEFT, padx=5)
+              relief=tk.FLAT, bd=0, padx=18, pady=10).pack(side=tk.LEFT, padx=4)
     
-    tk.Button(button_frame1, text="⏹ Detener", bg=danger_color, fg="white",
+    tk.Button(button_frame1, text="Detener", bg=bg_lighter, fg=text_color,
               font=("Segoe UI", 11, "bold"), command=stop_guardian,
-              relief=tk.FLAT, padx=20, pady=10).pack(side=tk.LEFT, padx=5)
+              relief=tk.FLAT, bd=0, padx=18, pady=10).pack(side=tk.LEFT, padx=4)
     
-    tk.Button(button_frame1, text="📊 Estadísticas", bg=accent_color, fg=bg_dark,
+    tk.Button(button_frame1, text="Estadísticas", bg=bg_lighter, fg=text_color,
               font=("Segoe UI", 11, "bold"), command=show_stats,
-              relief=tk.FLAT, padx=20, pady=10).pack(side=tk.LEFT, padx=5)
+              relief=tk.FLAT, bd=0, padx=18, pady=10).pack(side=tk.LEFT, padx=4)
     
-    tk.Button(button_frame1, text="🚨 Alertas", bg=warning_color, fg=bg_dark,
+    tk.Button(button_frame1, text="Alertas", bg=bg_lighter, fg=text_color,
               font=("Segoe UI", 11, "bold"), command=show_alerts,
-              relief=tk.FLAT, padx=20, pady=10).pack(side=tk.LEFT, padx=5)
+              relief=tk.FLAT, bd=0, padx=18, pady=10).pack(side=tk.LEFT, padx=4)
     
-    tk.Button(button_frame1, text="🎯 Metas", bg=accent_color, fg=bg_dark,
+    tk.Button(button_frame1, text="Metas", bg=bg_lighter, fg=text_color,
               font=("Segoe UI", 11, "bold"), command=show_goals,
-              relief=tk.FLAT, padx=20, pady=10).pack(side=tk.LEFT, padx=5)
+              relief=tk.FLAT, bd=0, padx=18, pady=10).pack(side=tk.LEFT, padx=4)
     
-    tk.Button(button_frame1, text="📈 Exportar", bg=success_color, fg=bg_dark,
+    tk.Button(button_frame1, text="Exportar", bg=bg_lighter, fg=text_color,
               font=("Segoe UI", 11, "bold"), command=export_report,
-              relief=tk.FLAT, padx=20, pady=10).pack(side=tk.LEFT, padx=5)
+              relief=tk.FLAT, bd=0, padx=18, pady=10).pack(side=tk.LEFT, padx=4)
     
     # Feature buttons - Row 2
     button_frame2 = tk.Frame(main_frame, bg=bg_dark)
     button_frame2.pack(fill=tk.X, pady=5)
     
-    tk.Button(button_frame2, text="👤 Perfiles", bg=bg_lighter, fg=text_color,
+    tk.Button(button_frame2, text="Perfiles", bg=bg_lighter, fg=text_color,
               font=("Segoe UI", 10, "bold"), command=switch_profile,
-              relief=tk.FLAT, padx=15, pady=8).pack(side=tk.LEFT, padx=5)
+              relief=tk.FLAT, bd=0, padx=14, pady=8).pack(side=tk.LEFT, padx=4)
     
-    tk.Button(button_frame2, text="✅ Whitelist", bg=bg_lighter, fg=text_color,
+    tk.Button(button_frame2, text="Whitelist", bg=bg_lighter, fg=text_color,
               font=("Segoe UI", 10, "bold"), command=manage_whitelist,
-              relief=tk.FLAT, padx=15, pady=8).pack(side=tk.LEFT, padx=5)
+              relief=tk.FLAT, bd=0, padx=14, pady=8).pack(side=tk.LEFT, padx=4)
     
-    tk.Button(button_frame2, text="⏰ Horario", bg=bg_lighter, fg=text_color,
+    tk.Button(button_frame2, text="Horario", bg=bg_lighter, fg=text_color,
               font=("Segoe UI", 10, "bold"), command=configure_schedule,
-              relief=tk.FLAT, padx=15, pady=8).pack(side=tk.LEFT, padx=5)
+              relief=tk.FLAT, bd=0, padx=14, pady=8).pack(side=tk.LEFT, padx=4)
     
-    tk.Button(button_frame2, text="🧘 Zen Mode", bg=bg_lighter, fg=text_color,
+    tk.Button(button_frame2, text="Zen Mode", bg=bg_lighter, fg=text_color,
               font=("Segoe UI", 10, "bold"), command=activate_zen_mode,
-              relief=tk.FLAT, padx=15, pady=8).pack(side=tk.LEFT, padx=5)
+              relief=tk.FLAT, bd=0, padx=14, pady=8).pack(side=tk.LEFT, padx=4)
     
-    tk.Button(button_frame2, text="📋 Reportes", bg=bg_lighter, fg=text_color,
+    tk.Button(button_frame2, text="Reportes", bg=bg_lighter, fg=text_color,
               font=("Segoe UI", 10, "bold"), command=view_reports,
-              relief=tk.FLAT, padx=15, pady=8).pack(side=tk.LEFT, padx=5)
+              relief=tk.FLAT, bd=0, padx=14, pady=8).pack(side=tk.LEFT, padx=4)
     
     # Apps bloqueadas
-    apps_label = tk.Label(main_frame, text="🚫 Aplicaciones Bloqueadas:",
-                          font=("Segoe UI", 12, "bold"), fg=accent_color, bg=bg_dark)
+    apps_label = tk.Label(main_frame, text="Aplicaciones bloqueadas",
+                          font=("Segoe UI", 11, "bold"), fg=text_color, bg=bg_dark)
     apps_label.pack(anchor=tk.W, pady=(15, 5))
     
-    apps_listbox = tk.Listbox(main_frame, bg=bg_light, fg=success_color,
+    apps_listbox = tk.Listbox(main_frame, bg=bg_light, fg=text_color,
                               font=("Courier New", 10), height=5)
     apps_listbox.pack(fill=tk.BOTH, expand=False, pady=(0, 10))
     
@@ -795,23 +817,23 @@ def create_main_window():
         apps_listbox.insert(tk.END, "  (Sin aplicaciones bloqueadas)")
     
     # Log
-    log_label = tk.Label(main_frame, text="📝 Actividad:",
-                        font=("Segoe UI", 12, "bold"), fg=accent_color, bg=bg_dark)
+    log_label = tk.Label(main_frame, text="Actividad",
+                        font=("Segoe UI", 11, "bold"), fg=text_color, bg=bg_dark)
     log_label.pack(anchor=tk.W, pady=(10, 5))
     
-    log_text = scrolledtext.ScrolledText(main_frame, bg="#0f0f1e", fg=success_color,
+    log_text = scrolledtext.ScrolledText(main_frame, bg=bg_light, fg=text_color,
                                          font=("Courier New", 9), height=8)
     log_text.pack(fill=tk.BOTH, expand=True)
     log_text.config(state=tk.DISABLED)
     
     # Footer
-    footer = tk.Frame(root, bg=bg_light, height=40)
-    footer.pack(fill=tk.X, padx=0, pady=0)
+    footer = tk.Frame(root, bg=bg_dark, height=30)
+    footer.pack(fill=tk.X, padx=18, pady=(0, 10))
     footer.pack_propagate(False)
     
-    footer_text = tk.Label(footer, text="Guardian v5.1 | Perfiles | Whitelist | Horario | Zen Mode | Reportes",
-                           font=("Segoe UI", 9), fg="#7f8c8d", bg=bg_light)
-    footer_text.pack(pady=8)
+    footer_text = tk.Label(footer, text="v5.1 · Perfiles · Whitelist · Horario · Zen · Reportes",
+                           font=("Segoe UI", 9), fg=text_secondary, bg=bg_dark)
+    footer_text.pack(anchor=tk.W)
     
     # Initialize
     update_status("✓ Guardian v5.1 iniciado - Listo para monitorear")
@@ -826,4 +848,3 @@ def create_main_window():
 if __name__ == "__main__":
     root = create_main_window()
     root.mainloop()
-
