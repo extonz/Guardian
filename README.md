@@ -71,12 +71,12 @@ A diferencia de otros bloqueadores o trackers de productividad, **Guardian**:
 - Estadísticas de sesiones recientes
 - Mejores sesiones registradas
 
-### 🎨 UI Profesional (v5.1+ ✨ NUEVO)
-- Interfaz oscura moderna (dark theme)
-- Diálogos personalizados profesionales
-- Sin componentes predeterminados de Windows
-- Tema de colores consistente (cyan/verde/naranja)
-- Iconografía con emojis mejorada
+### 🎨 UI Minimalista (v5.1+ ✨ NUEVO)
+- Interfaz oscura limpia y simple
+- Diseño flat sin degradados
+- Diálogos personalizados consistentes
+- Jerarquía visual enfocada en productividad
+- Controles directos y legibles
 
 ### 👤 Gestión de Perfiles (v5.1+ ✨ NUEVO)
 - Crear múltiples perfiles de usuario
