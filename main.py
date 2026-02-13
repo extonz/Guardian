@@ -32,6 +32,14 @@ except Exception as e:
     print(f"Warning: monitor unavailable ({e}). Running UI without active monitoring.")
 
     def monitor_apps(*args, **kwargs):
+        """
+        No-op placeholder used when the monitoring backend is unavailable.
+        
+        This function accepts any positional and keyword arguments and performs no action; it exists to provide a safe fallback when the real monitoring implementation cannot be imported.
+        
+        Returns:
+            None
+        """
         return None
 
 # Import new v5.1 features
@@ -567,7 +575,11 @@ def update_status(message):
         log_text.config(state=tk.DISABLED)
 
 def start_guardian():
-    """Start Guardian monitoring."""
+    """
+    Enable Guardian monitoring.
+    
+    Sets the module state to indicate monitoring is active. If a monitoring backend is available, starts the monitor in a background daemon thread and updates the status message; otherwise updates the status to indicate monitoring is unavailable.
+    """
     global monitor_running
     if not monitor_running:
         monitor_running = True
@@ -578,7 +590,11 @@ def start_guardian():
             update_status("⚠ Guardian iniciado sin monitoreo (falta pygetwindow)")
 
 def stop_guardian():
-    """Stop Guardian monitoring."""
+    """
+    Stop Guardian monitoring and update the UI status.
+    
+    Sets the monitor state to not running and posts "⏹ Guardian detenido" to the status label and activity log.
+    """
     global monitor_running
     monitor_running = False
     update_status("⏹ Guardian detenido")
@@ -698,7 +714,14 @@ def view_reports():
 # ======================
 
 def create_main_window():
-    """Create and configure main Guardian window."""
+    """
+    Create and configure the main Guardian application window.
+    
+    Sets module-level globals: `root`, `status_label`, `log_text`, and `current_settings`. Builds the UI (header, control buttons, blocked apps list, activity log, and footer) and initializes application status.
+    
+    Returns:
+        root (tk.Tk): The configured main Tk window ready to be displayed.
+    """
     global root, status_label, log_text, current_settings
     
     root = tk.Tk()
