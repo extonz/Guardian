@@ -14,6 +14,11 @@ _warned_unavailable = False
 
 
 def _warn_unavailable_once():
+    """
+    Emit a one-time warning that window monitoring is disabled because `pygetwindow` is unavailable.
+    
+    This function prints a single warning message the first time it is called; subsequent calls do nothing.
+    """
     global _warned_unavailable
     if not _warned_unavailable:
         print("[Guardian] Aviso: 'pygetwindow' no está disponible. El monitoreo de ventanas quedará deshabilitado.")
@@ -21,7 +26,14 @@ def _warn_unavailable_once():
 
 
 def get_open_windows():
-    """Obtiene ventanas abiertas visibles."""
+    """
+    Return the list of currently open, visible windows.
+    
+    Each item is a dictionary with keys "title" (the window's title) and "isActive" (a boolean indicating whether the window is active).
+    
+    Returns:
+        list[dict]: A list of window dictionaries; returns an empty list if window enumeration is unavailable or an error occurs.
+    """
     if gw is None:
         _warn_unavailable_once()
         return []
@@ -41,7 +53,17 @@ def get_open_windows():
 
 
 def find_blocked_apps():
-    """Busca apps bloqueadas entre ventanas abiertas."""
+    """
+    Find blocked applications among currently open windows.
+    
+    Scans visible open window titles and matches them against configured BLOCKED_APPS (case-insensitive, ".exe" suffix ignored) to identify any running blocked applications. Each matched window is returned once (duplicate titles are deduplicated regardless of case).
+    
+    Returns:
+        list[dict]: A list of matches where each dict contains:
+            - "title" (str): the window's title as reported by the system.
+            - "app" (str): the blocked app entry from BLOCKED_APPS that matched.
+            - "isActive" (bool): whether the matched window is currently active.
+    """
     open_windows = get_open_windows()
     blocked_found = []
 
@@ -64,7 +86,12 @@ def find_blocked_apps():
 
 
 def get_active_window():
-    """Obtiene la ventana activa."""
+    """
+    Retrieve the title of the currently active window.
+    
+    Returns:
+        str or None: The active window's title, or `None` if no active window is available, the pygetwindow dependency is missing, or an error occurred while retrieving it.
+    """
     if gw is None:
         _warn_unavailable_once()
         return None
@@ -80,7 +107,16 @@ def get_active_window():
 
 
 def is_blocked_app_active():
-    """Verifica si una app bloqueada está activa."""
+    """
+    Determine which blocked application, if any, corresponds to the currently active window.
+    
+    Matches are case-insensitive and compare the active window title against each entry in BLOCKED_APPS
+    with any trailing ".exe" removed from the blocked name.
+    
+    Returns:
+        str or None: The blocked application name from BLOCKED_APPS that matches the active window,
+        or `None` if no blocked application is active or no active window is available.
+    """
     active_window = get_active_window()
     if not active_window:
         return None
