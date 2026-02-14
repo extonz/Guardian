@@ -102,6 +102,11 @@ A diferencia de otros bloqueadores o trackers de productividad, **Guardian**:
 - Silencia todas las notificaciones
 - Ambiente limpio para concentrarse
 - Racha de productividad
+- 
+
+> [!WARNING]
+> Puede que estas características no funcionen del todo bien. 
+
 
 ### 🏆 Gamificación
 - Sistema de 6 logros desbloqueables
@@ -414,7 +419,7 @@ Este proyecto está bajo la Licencia MIT - ve [LICENSE](LICENSE)
 
 ## 📞 Contacto
 
-- 📧 Email: nastasiagar123+support@gmail.com
+- 📧 Email: call.us.guardian@gmail.com
 - 💬 Discussions: [GitHub Discussions](https://github.com/extonz/guardian/discussions)
 
 ---
@@ -424,9 +429,7 @@ Este proyecto está bajo la Licencia MIT - ve [LICENSE](LICENSE)
 > Este proyecto incluye una combinación de desarrollo propio, herramientas de IA (como ChatGPT, Claude o Grok) y código open-source debidamente adaptado.
 > Todo el software se utiliza con fines legítimos y de acuerdo con sus respectivas licencias.
 >   Si consideras que algún fragmento de código te pertenece, puedes contactarme y lo revisaré sin problema.
-a.
-
 
 ---
 
-**¿Te gusta Guardian? ⭐ ¡Dale una estrella!**
+**¿Te gusta Guardian? ⭐ ¡Dale una estrella!** **Ayuda mucho!**
