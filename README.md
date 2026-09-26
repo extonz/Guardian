@@ -32,6 +32,10 @@ Consulta la [Wiki](https://github.com/extonz/Guardian/wiki) para la guía en ing
 
 Las contribuciones son bienvenidas. Abre un [issue](https://github.com/extonz/Guardian/issues) para informar de errores o sugerir mejoras.
 
+## Contacto
+
+[hello@noel.work.gd](mailto:hello@noel.work.gd)
+
 ## Licencia
 
 [MIT](LICENSE)
