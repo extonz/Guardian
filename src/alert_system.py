@@ -4,7 +4,6 @@ Múltiples sonidos, volumes, notificaciones en pantalla.
 """
 
 import os
-from playsound import playsound
 import threading
 import ctypes
 
@@ -29,17 +28,27 @@ def play_alert(alert_type="default", volume=100):
     
     if os.path.exists(sound_file):
         try:
-            # Nota: playsound no soporta volumen nativo, usar osmixvolume sería lo ideal
-            threading.Thread(target=playsound, args=(sound_file,), daemon=True).start()
+            import platform
+            if platform.system() == 'Windows':
+                import winsound
+                threading.Thread(target=winsound.PlaySound, args=(sound_file, winsound.SND_FILENAME | winsound.SND_ASYNC), daemon=True).start()
+            elif platform.system() == 'Darwin':
+                threading.Thread(target=lambda: os.system(f"afplay {sound_file}"), daemon=True).start()
+            else:
+                threading.Thread(target=lambda: os.system(f"paplay {sound_file}"), daemon=True).start()
         except Exception as e:
             print(f"Error reproduciendo alerta: {e}")
 
 def show_toast_notification(title, message, duration=3000):
-    """Muestra notificación tipo Windows Toast (Windows 10+)."""
+    """Muestra notificación multiplataforma."""
     try:
-        from win10toast import ToastNotifier
-        toaster = ToastNotifier()
-        toaster.show_toast(title, message, duration=duration, threaded=True)
+        from plyer import notification
+        notification.notify(
+            title=title,
+            message=message,
+            app_name='Guardian',
+            timeout=duration // 1000
+        )
     except ImportError:
         # Fallback: mostrar en consola
         print(f"\n🔔 [{title}] {message}")
@@ -49,7 +58,10 @@ def show_toast_notification(title, message, duration=3000):
 def show_system_alert(title, message):
     """Muestra alerta del sistema (MessageBox)."""
     try:
-        ctypes.windll.user32.MessageBoxW(0, message, title, 0x30)
+        if os.name == 'nt':
+            ctypes.windll.user32.MessageBoxW(0, message, title, 0x30)
+        else:
+            print(f"⚠️ {title}: {message}")
     except Exception as e:
         print(f"Error mostrando alerta del sistema: {e}")
 
