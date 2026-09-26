@@ -1,0 +1,73 @@
+name: Build Multi-Platform Releases
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Build on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install System Dependencies (Linux)
+        if: matrix.os == 'ubuntu-latest'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y python3-tk xvfb
+
+      - name: Install Python Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install pyinstaller
+          pip install -r requirements.txt
+
+      - name: Build with PyInstaller
+        run: |
+          pyinstaller --name "Guardian" --onefile --windowed main.py
+
+      - name: Install macOS DMG Packager
+        if: matrix.os == 'macos-latest'
+        run: npm install -g create-dmg
+
+      - name: Package macOS (DMG)
+        if: matrix.os == 'macos-latest'
+        run: |
+          # Remove problematic spaces or ensure it's a solid path
+          create-dmg dist/Guardian.dmg dist/Guardian.app/ || true
+          # Fallback to ZIP since upload artifacts cant do directories well
+          cd dist && zip -r Guardian-macOS.zip Guardian.app/
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Guardian-${{ runner.os }}
+          path: |
+            dist/Guardian.exe
+            dist/Guardian-macOS.zip
+            dist/Guardian.dmg
+            dist/Guardian
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          files: |
+            dist/Guardian.exe
+            dist/Guardian-macOS.zip
+            dist/Guardian.dmg
+            dist/Guardian
