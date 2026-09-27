@@ -5,10 +5,7 @@ from src.config import BLOCKED_APPS, WARNING_TIME
 from src.window_detector import find_blocked_apps, is_blocked_app_active
 from src.settings_manager import get_whitelist, log_block_event
 from src.logger import log_block, log_close, log_info
-try:
-    from playsound import playsound
-except Exception:
-    playsound = None
+playsound = None
 
 def kill_process_by_name(name):
     """Cierra procesos por nombre"""
@@ -40,12 +37,23 @@ def alert_and_kill(app_name, alert_sound_path, countdown=10, ui_callback=None):
 
     # Reproducir sonido en otro hilo para no bloquear
     log_block(app_name)
-    if playsound:
-        threading.Thread(target=playsound, args=(alert_sound_path,), daemon=True).start()
-    else:
+    import platform
+    if platform.system() == 'Windows':
         try:
             import winsound
             threading.Thread(target=winsound.MessageBeep, args=(winsound.MB_ICONEXCLAMATION,), daemon=True).start()
+        except Exception:
+            pass
+    elif platform.system() == 'Darwin':
+        try:
+            import os
+            threading.Thread(target=lambda: os.system("afplay /System/Library/Sounds/Ping.aiff"), daemon=True).start()
+        except Exception:
+            pass
+    else:
+        try:
+            import os
+            threading.Thread(target=lambda: os.system("paplay /usr/share/sounds/freedesktop/stereo/dialog-warning.oga"), daemon=True).start()
         except Exception:
             pass
     countdown_thread()

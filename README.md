@@ -126,6 +126,11 @@ cd Guardian
 pip install -r requirements.txt
 ```
 
+### Releases / Binarios Ejecutables
+
+**Guardian** se distribuye como binario a través de GitHub Releases para mayor comodidad y uso directo, con la facilidad de crear compilados mediante GitHub Actions de manera automática al subir los tags de release.
+Simplemente diríjase a la sección "Releases" del repositorio, y descargue el archivo respectivo para su sistema operativo.
+
 ### Uso
 
 ```bash
@@ -190,37 +195,24 @@ python main.py
 Guardian/
 ├── main.py                      # Punto de entrada principal
 ├── src/                         # Código fuente
-│   ├── monitor.py             # Monitoreo de apps
-│   ├── blocker.py             # Sistema de bloqueo
-│   ├── settings_manager.py    # Gestión de configuración
+│   ├── core/
+│   │   └── monitor.py             # Monitoreo de apps
+│   ├── utils/
+│   │   └── settings_manager.py    # Gestión de configuración
 │   ├── logger.py              # Sistema de logs
-│   ├── reports.py             # Generador de reportes
-│   ├── scheduler.py           # Planificador
-│   ├── gamification.py        # Sistema de logros
-│   ├── zen_mode.py            # Modo zen
-│   ├── security.py            # Detección de seguridad
-│   ├── ml_analyzer.py         # Análisis ML
-│   ├── advanced_stats.py      # Estadísticas avanzadas ✨
-│   ├── daily_goals.py         # Metas diarias ✨
-│   ├── smart_alerts.py        # Alertas inteligentes ✨
-│   ├── session_tracker.py     # Historial de sesiones ✨
-│   ├── advanced_exporter.py   # Exportación avanzada ✨
-│   ├── ui/
-│   │   ├── modern_ui.py
-│   │   └── dashboard.html
-│   ├── examples/
-│   └── tools/
-├── config/                     # Configuración
-│   ├── guardian_settings.json
-│   ├── guardian_stats.json
-│   └── daily_goals.json
-├── data/                       # Datos
-│   └── sessions_history.json
-├── docs/                       # Documentación
-│   ├── CHANGELOG.md
-│   ├── FEATURES.md
-│   └── INSTALL.md
+│   ├── daily_goals.py         # Metas diarias
+│   ├── smart_alerts.py        # Alertas inteligentes
+│   ├── session_tracker.py     # Historial de sesiones
+│   ├── alert_system.py        # Alertas del sistema (sonidos)
+│   ├── config.py              # Configuración (Apps bloqueadas)
+│   ├── window_detector.py     # Gestor de ventanas bloqueadas
+│   ├── whitelist.py           # Excepciones
+│   └── utils.py               # Herramientas de utilidad
+├── config/                     # Configuración (al autogenerarse)
+├── .github/workflows/           # Acciones de build automatizadas
+├── tests/                      # Tests unitarios
 ├── requirements.txt            # Dependencias
+├── buildozer.spec              # Build spec de Android
 ├── LICENSE                     # Licencia MIT
 └── README.md                   # Este archivo
 ```

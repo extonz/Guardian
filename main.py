@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-"""
 Guardian - Sistema de Bienestar Digital v5.1
 App principal con UI profesional, diálogos personalizados y funciones restauradas
 """
@@ -37,10 +36,8 @@ except Exception as e:
 # Import new v5.1 features
 try:
     from src.daily_goals import DailyGoalsManager
-    from src.advanced_stats import AdvancedStats
     from src.smart_alerts import SmartAlerts
     from src.session_tracker import SessionTracker
-    from src.advanced_exporter import AdvancedExporter
 except ImportError as e:
     print(f"Warning: Some v5.1 features not available: {e}")
 
