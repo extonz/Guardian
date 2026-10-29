@@ -42,20 +42,22 @@ jobs:
         run: |
           mkdir -p dist/deb/DEBIAN dist/deb/usr/bin dist/deb/usr/share/guardian
           cp -r dist/Guardian/* dist/deb/usr/share/guardian/
-          printf 'Package: guardian\nVersion: 6.0.0\nSection: utils\nPriority: optional\nArchitecture: amd64\nMaintainer: Guardian contributors\nDescription: Digital wellbeing desktop application\n' > dist/deb/DEBIAN/control
-          printf '#!/bin/sh\nexec /usr/share/guardian/Guardian "$@"\n' > dist/deb/usr/bin/guardian
+          printf 'Package: guardian\\nVersion: 6.0.0\\nSection: utils\\nPriority: optional\\nArchitecture: amd64\\nMaintainer: Guardian contributors\\nDescription: Digital wellbeing desktop application\\n' > dist/deb/DEBIAN/control
+          printf '#!/bin/sh\\nexec /usr/share/guardian/Guardian "$@"\\n' > dist/deb/usr/bin/guardian
           chmod +x dist/deb/usr/bin/guardian
           dpkg-deb --build dist/deb dist/guardian-linux-amd64.deb
       - name: Archive build
         shell: bash
         run: |
           cd dist
-          if [ '${{ runner.os }}' = 'Windows' ]; then 7z a ../guardian-windows.zip Guardian.exe; elif [ '${{ runner.os }}' = 'macOS' ]; then ditto -c -k --sequesterRsrc --keepParent Guardian.app ../guardian-macos.zip; else cp guardian-linux-amd64.deb ../guardian-linux-amd64.deb; fi
+          if [ '${{ runner.os }}' = 'Windows' ]; then 7z a ../guardian-windows.zip Guardian.exe; elif [ '${{ runner.os }}' = 'macOS' ]; then ditto -c -k --sequesterRsrc --keepParent Guardian.app ../guardian-macos.zip; else cp guardian-linux-amd64.deb ../guardian-linux-amd64.deb; zip ../guardian-linux.zip guardian-linux-amd64.deb; fi
       - uses: actions/upload-artifact@v4
         with:
           name: guardian-${{ matrix.name }}
-          path: guardian-${{ matrix.name }}.zip
-          if-no-files-found: warn
+          path: |
+            guardian-${{ matrix.name }}.zip
+            guardian-linux-amd64.deb
+          if-no-files-found: error
   release:
     if: startsWith(github.ref, 'refs/tags/')
     needs: build
