@@ -1,0 +1,72 @@
+name: Guardian v6 build
+on:
+  workflow_dispatch:
+  push:
+    tags: ['v*.*.*']
+permissions:
+  contents: write
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: windows-latest
+            name: windows
+          - os: macos-latest
+            name: macos
+          - os: ubuntu-latest
+            name: linux
+    runs-on: ${{ matrix.os }}
+    defaults:
+      run:
+        working-directory: guardian-v6
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+          cache-dependency-path: guardian-v6/requirements-build.txt
+      - name: Install system dependencies
+        if: runner.os == 'Linux'
+        run: sudo apt-get update && sudo apt-get install -y python3-tk python3-dev
+      - name: Install dependencies
+        run: python -m pip install -r requirements-build.txt
+      - name: Tests
+        run: python -m pytest
+      - name: Package application
+        run: python -m PyInstaller --noconfirm --clean --windowed --name Guardian main.py
+      - name: Create Linux deb package
+        if: runner.os == 'Linux'
+        run: |
+          mkdir -p dist/deb/DEBIAN dist/deb/usr/bin dist/deb/usr/share/guardian
+          cp -r dist/Guardian/* dist/deb/usr/share/guardian/
+          printf 'Package: guardian\\nVersion: 6.0.0\\nSection: utils\\nPriority: optional\\nArchitecture: amd64\\nMaintainer: Guardian contributors\\nDescription: Digital wellbeing desktop application\\n' > dist/deb/DEBIAN/control
+          printf '#!/bin/sh\\nexec /usr/share/guardian/Guardian "$@"\\n' > dist/deb/usr/bin/guardian
+          chmod +x dist/deb/usr/bin/guardian
+          dpkg-deb --build dist/deb dist/guardian-linux-amd64.deb
+      - name: Archive build
+        shell: bash
+        run: |
+          cd dist
+          if [ '${{ runner.os }}' = 'Windows' ]; then 7z a ../guardian-windows.zip Guardian.exe; elif [ '${{ runner.os }}' = 'macOS' ]; then ditto -c -k --sequesterRsrc --keepParent Guardian.app ../guardian-macos.zip; else cp guardian-linux-amd64.deb ../guardian-linux-amd64.deb; zip ../guardian-linux.zip guardian-linux-amd64.deb; fi
+      - uses: actions/upload-artifact@v4
+        with:
+          name: guardian-${{ matrix.name }}
+          path: |
+            guardian-${{ matrix.name }}.zip
+            guardian-linux-amd64.deb
+          if-no-files-found: error
+  release:
+    if: startsWith(github.ref, 'refs/tags/')
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+          merge-multiple: true
+      - uses: softprops/action-gh-release@v2
+        with:
+          files: artifacts/*
