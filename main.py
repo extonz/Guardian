@@ -1,847 +1,100 @@
 #!/usr/bin/env python3
-Guardian - Sistema de Bienestar Digital v5.1
-App principal con UI profesional, diálogos personalizados y funciones restauradas
-"""
+"""Guardian v6 desktop application."""
+from __future__ import annotations
+import queue, threading, tkinter as tk
+from tkinter import messagebox
+import customtkinter as ctk
+from src.analytics import summary
+from src.engine import Monitor
+from src.storage import load, save
 
-import sys
-import os
-sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+ctk.set_appearance_mode("dark")
+ctk.set_default_color_theme("blue")
 
-import threading
-import tkinter as tk
-from tkinter import scrolledtext, messagebox, filedialog, ttk
-import tkinter.simpledialog
-from datetime import datetime, time
-import json
-from pathlib import Path
+class GuardianApp(ctk.CTk):
+    def __init__(self):
+        super().__init__()
+        self.title("Guardian 6")
+        self.geometry("1020x700")
+        self.minsize(800, 560)
+        self.configure(fg_color="#0b0b0d")
+        self.events = queue.Queue()
+        self.monitor = Monitor(on_event=lambda title: self.events.put(("blocked", title)))
+        self.settings = load("settings")
+        self._build()
+        self.after(200, self._poll)
+        self.protocol("WM_DELETE_WINDOW", self._close)
 
-# Import core modules (safe imports)
-try:
-    from src.settings_manager import load_settings, save_settings, get_blocked_apps
-    from src.logger import log_info
-except ImportError as e:
-    print(f"Error importing core modules: {e}")
-    sys.exit(1)
+    def _build(self):
+        shell = ctk.CTkFrame(self, fg_color="transparent")
+        shell.pack(fill="both", expand=True, padx=24, pady=24)
+        sidebar = ctk.CTkFrame(shell, width=190, corner_radius=18, fg_color="#141417")
+        sidebar.pack(side="left", fill="y", padx=(0, 18)); sidebar.pack_propagate(False)
+        ctk.CTkLabel(sidebar, text="◉  GUARDIAN", font=ctk.CTkFont(size=20, weight="bold")).pack(anchor="w", padx=20, pady=(24, 30))
+        for label, callback in [("Dashboard", self._dashboard), ("Zen mode", self._zen), ("Analíticas", self._analytics), ("Ajustes", self._settings)]:
+            ctk.CTkButton(sidebar, text=label, anchor="w", fg_color="transparent", hover_color="#26262b", command=callback).pack(fill="x", padx=12, pady=4)
+        self.content = ctk.CTkFrame(shell, fg_color="transparent")
+        self.content.pack(side="left", fill="both", expand=True)
+        self._dashboard()
 
-MONITOR_AVAILABLE = True
-try:
-    from src.monitor import monitor_apps
-except Exception as e:
-    MONITOR_AVAILABLE = False
-    print(f"Warning: monitor unavailable ({e}). Running UI without active monitoring.")
+    def _clear(self):
+        for widget in self.content.winfo_children(): widget.destroy()
 
-    def monitor_apps(*args, **kwargs):
-        return None
+    def _heading(self, title, subtitle):
+        ctk.CTkLabel(self.content, text=title, font=ctk.CTkFont(size=30, weight="bold")).pack(anchor="w", pady=(10, 2))
+        ctk.CTkLabel(self.content, text=subtitle, text_color="#a1a1aa").pack(anchor="w", pady=(0, 22))
 
-# Import new v5.1 features
-try:
-    from src.daily_goals import DailyGoalsManager
-    from src.smart_alerts import SmartAlerts
-    from src.session_tracker import SessionTracker
-except ImportError as e:
-    print(f"Warning: Some v5.1 features not available: {e}")
+    def _dashboard(self):
+        self._clear(); self._heading("Tu espacio de concentración", "Menos distracciones. Más intención.")
+        data = summary()
+        grid = ctk.CTkFrame(self.content, fg_color="transparent"); grid.pack(fill="x")
+        for label, value in [("Bloqueos detectados", data["blocks"]), ("Minutos de foco", data["focus_minutes"]), ("Sesiones", data["sessions"])]:
+            card = ctk.CTkFrame(grid, corner_radius=16, fg_color="#17171b"); card.pack(side="left", fill="x", expand=True, padx=(0, 10), pady=4)
+            ctk.CTkLabel(card, text=label, text_color="#a1a1aa").pack(anchor="w", padx=16, pady=(18, 4))
+            ctk.CTkLabel(card, text=str(value), font=ctk.CTkFont(size=30, weight="bold")).pack(anchor="w", padx=16, pady=(0, 18))
+        ctk.CTkLabel(self.content, text="Monitor", font=ctk.CTkFont(size=20, weight="bold")).pack(anchor="w", pady=(28, 10))
+        row = ctk.CTkFrame(self.content, fg_color="#17171b", corner_radius=16); row.pack(fill="x")
+        ctk.CTkLabel(row, text="Detecta las ventanas configuradas sin cerrar aplicaciones.").pack(side="left", padx=16, pady=18)
+        self.monitor_button = ctk.CTkButton(row, text="Detener monitor" if self.monitor.running else "Iniciar monitor", command=self._toggle_monitor); self.monitor_button.pack(side="right", padx=14, pady=12)
+        ctk.CTkLabel(self.content, text="Actividad reciente", font=ctk.CTkFont(size=20, weight="bold")).pack(anchor="w", pady=(28, 8))
+        for event in load("stats").get("events", [])[-5:][::-1]:
+            if isinstance(event, dict): ctk.CTkLabel(self.content, text=f"{event.get('at','')}   ·   {event.get('app','Aplicación')}", text_color="#b4b4bc").pack(anchor="w", pady=3)
 
-# ======================
-# Global variables
-# ======================
-root = None
-status_label = None
-log_text = None
-monitor_running = False
-current_settings = None
+    def _toggle_monitor(self):
+        if self.monitor.running: self.monitor.stop()
+        else: self.monitor.start()
+        self._dashboard()
 
-# Colors - Minimal dark theme (flat, no gradients)
-bg_dark = "#101214"
-bg_light = "#171a1f"
-bg_lighter = "#22262d"
-accent_color = "#7dd3fc"
-accent_hover = "#38bdf8"
-success_color = "#86efac"
-warning_color = "#fcd34d"
-danger_color = "#fca5a5"
-text_color = "#e5e7eb"
-text_secondary = "#9ca3af"
+    def _zen(self):
+        self.settings = load("settings"); self.settings["zen_mode"] = not self.settings.get("zen_mode", False); save("settings", self.settings)
+        messagebox.showinfo("Zen mode", "Modo Zen activado" if self.settings["zen_mode"] else "Modo Zen desactivado")
 
-# Data directory for profiles and settings
-DATA_DIR = Path("config")
-PROFILES_FILE = DATA_DIR / "profiles.json"
-WHITELIST_FILE = DATA_DIR / "whitelist.json"
-SCHEDULE_FILE = DATA_DIR / "schedule.json"
+    def _analytics(self):
+        self._clear(); self._heading("Analíticas", "Resumen guardado localmente")
+        for key, value in summary().items(): ctk.CTkLabel(self.content, text=f"{key.replace('_',' ').capitalize()}:  {value}", font=ctk.CTkFont(size=18)).pack(anchor="w", pady=8)
 
-# Ensure directories exist
-DATA_DIR.mkdir(exist_ok=True)
+    def _settings(self):
+        self._clear(); self._heading("Ajustes", "Personaliza qué aplicaciones quieres vigilar")
+        apps = ctk.CTkTextbox(self.content, height=190); apps.pack(fill="x", pady=6); apps.insert("1.0", "\n".join(self.settings.get("blocked_apps", [])))
+        whitelist = ctk.CTkTextbox(self.content, height=130); whitelist.pack(fill="x", pady=6); whitelist.insert("1.0", "\n".join(self.settings.get("whitelist", [])))
+        ctk.CTkLabel(self.content, text="Aplicaciones restringidas (una por línea)").pack(anchor="w")
+        ctk.CTkLabel(self.content, text="Whitelist: nunca mostrar avisos para estos títulos").pack(anchor="w")
+        def store():
+            self.settings["blocked_apps"] = [x.strip() for x in apps.get("1.0", "end").splitlines() if x.strip()]
+            self.settings["whitelist"] = [x.strip() for x in whitelist.get("1.0", "end").splitlines() if x.strip()]
+            save("settings", self.settings); messagebox.showinfo("Guardian", "Ajustes guardados")
+        ctk.CTkButton(self.content, text="Guardar ajustes", command=store).pack(anchor="e", pady=12)
 
-# ======================
-# Utility Functions - Profile Management
-# ======================
+    def _poll(self):
+        while True:
+            try: kind, title = self.events.get_nowait()
+            except queue.Empty: break
+            if kind == "blocked": self.title(f"Guardian 6 · Distracción detectada: {title}")
+        if self.winfo_exists(): self.after(200, self._poll)
 
-def get_profiles():
-    """Load all saved profiles."""
-    try:
-        if PROFILES_FILE.exists():
-            with open(PROFILES_FILE, 'r') as f:
-                return json.load(f)
-        return {"default": {"name": "Defecto", "blocked_apps": [], "zen_mode": False}}
-    except Exception as e:
-        print(f"Error loading profiles: {e}")
-        return {"default": {"name": "Defecto", "blocked_apps": [], "zen_mode": False}}
-
-def save_profiles(profiles):
-    """Save profiles to file."""
-    try:
-        with open(PROFILES_FILE, 'w') as f:
-            json.dump(profiles, f, indent=2)
-        return True
-    except Exception as e:
-        print(f"Error saving profiles: {e}")
-        return False
-
-def get_whitelist():
-    """Load whitelist."""
-    try:
-        if WHITELIST_FILE.exists():
-            with open(WHITELIST_FILE, 'r') as f:
-                return json.load(f)
-        return {"apps": [], "websites": []}
-    except Exception as e:
-        print(f"Error loading whitelist: {e}")
-        return {"apps": [], "websites": []}
-
-def save_whitelist(whitelist):
-    """Save whitelist."""
-    try:
-        with open(WHITELIST_FILE, 'w') as f:
-            json.dump(whitelist, f, indent=2)
-        return True
-    except Exception as e:
-        print(f"Error saving whitelist: {e}")
-        return False
-
-def get_schedule():
-    """Load schedule configuration."""
-    try:
-        if SCHEDULE_FILE.exists():
-            with open(SCHEDULE_FILE, 'r') as f:
-                return json.load(f)
-        return {
-            "work_hours": {"start": "09:00", "end": "17:00"},
-            "break_duration": 15,
-            "sessions": {}
-        }
-    except Exception as e:
-        print(f"Error loading schedule: {e}")
-        return {"work_hours": {"start": "09:00", "end": "17:00"}, "break_duration": 15, "sessions": {}}
-
-def save_schedule(schedule):
-    """Save schedule configuration."""
-    try:
-        with open(SCHEDULE_FILE, 'w') as f:
-            json.dump(schedule, f, indent=2)
-        return True
-    except Exception as e:
-        print(f"Error saving schedule: {e}")
-        return False
-
-# ======================
-# Custom Dialog Classes
-# ======================
-
-class CustomDialog(tk.Toplevel):
-    """Base class for custom dialogs with professional styling."""
-    def __init__(self, parent, title, width=400, height=300):
-        super().__init__(parent)
-        self.title(title)
-        self.geometry(f"{width}x{height}")
-        self.resizable(False, False)
-        self.config(bg=bg_dark)
-        self.transient(parent)
-        self.grab_set()
-        
-        # Center on parent
-        self.update_idletasks()
-        x = parent.winfo_x() + (parent.winfo_width() // 2) - (width // 2)
-        y = parent.winfo_y() + (parent.winfo_height() // 2) - (height // 2)
-        self.geometry(f"+{x}+{y}")
-
-class ProfileDialog(CustomDialog):
-    """Dialog for managing profiles."""
-    def __init__(self, parent):
-        super().__init__(parent, "Gestión de Perfiles", width=500, height=400)
-        self.result = None
-        self.profiles = get_profiles()
-        self.create_widgets()
-    
-    def create_widgets(self):
-        # Title
-        title_label = tk.Label(self, text="👤 GESTIÓN DE PERFILES", 
-                              font=("Segoe UI", 14, "bold"),
-                              fg=accent_color, bg=bg_dark)
-        title_label.pack(pady=10)
-        
-        # Profiles listbox
-        tk.Label(self, text="Perfiles disponibles:", font=("Segoe UI", 10),
-                fg=text_color, bg=bg_dark).pack(anchor=tk.W, padx=20, pady=(5, 0))
-        
-        listbox_frame = tk.Frame(self, bg=bg_dark)
-        listbox_frame.pack(fill=tk.BOTH, expand=True, padx=20, pady=5)
-        
-        scrollbar = tk.Scrollbar(listbox_frame)
-        scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
-        
-        self.profiles_listbox = tk.Listbox(
-            listbox_frame, bg=bg_light, fg=success_color,
-            font=("Segoe UI", 10), yscrollcommand=scrollbar.set
-        )
-        self.profiles_listbox.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
-        scrollbar.config(command=self.profiles_listbox.yview)
-        
-        for profile_id, profile in self.profiles.items():
-            self.profiles_listbox.insert(tk.END, f"  {profile.get('name', profile_id)}")
-        
-        # Buttons
-        button_frame = tk.Frame(self, bg=bg_dark)
-        button_frame.pack(fill=tk.X, padx=20, pady=10)
-        
-        tk.Button(button_frame, text="Crear Perfil", bg=success_color, fg=bg_dark,
-                 font=("Segoe UI", 10, "bold"), command=self.create_profile,
-                 relief=tk.FLAT, padx=15).pack(side=tk.LEFT, padx=5)
-        
-        tk.Button(button_frame, text="Eliminar", bg=danger_color, fg="white",
-                 font=("Segoe UI", 10, "bold"), command=self.delete_profile,
-                 relief=tk.FLAT, padx=15).pack(side=tk.LEFT, padx=5)
-        
-        tk.Button(button_frame, text="Cerrar", bg=bg_lighter, fg=text_color,
-                 font=("Segoe UI", 10, "bold"), command=self.destroy,
-                 relief=tk.FLAT, padx=15).pack(side=tk.RIGHT, padx=5)
-    
-    def create_profile(self):
-        dialog = tk.Toplevel(self)
-        dialog.title("Nuevo Perfil")
-        dialog.geometry("300x120")
-        dialog.config(bg=bg_dark)
-        
-        tk.Label(dialog, text="Nombre del perfil:", fg=text_color, bg=bg_dark).pack(pady=5)
-        entry = tk.Entry(dialog, bg=bg_light, fg=text_color, font=("Segoe UI", 10))
-        entry.pack(padx=20, pady=5, fill=tk.X)
-        entry.focus()
-        
-        def save():
-            name = entry.get().strip()
-            if name:
-                self.profiles[name.lower().replace(" ", "_")] = {
-                    "name": name,
-                    "blocked_apps": [],
-                    "zen_mode": False
-                }
-                save_profiles(self.profiles)
-                self.profiles_listbox.insert(tk.END, f"  {name}")
-                dialog.destroy()
-                update_status("✓ Perfil creado exitosamente")
-        
-        tk.Button(dialog, text="Guardar", bg=success_color, fg=bg_dark,
-                 command=save, relief=tk.FLAT).pack(pady=10)
-    
-    def delete_profile(self):
-        selection = self.profiles_listbox.curselection()
-        if selection:
-            profiles_list = list(self.profiles.keys())
-            if len(profiles_list) > 1:
-                profile_id = profiles_list[selection[0]]
-                if profile_id != "default":
-                    del self.profiles[profile_id]
-                    save_profiles(self.profiles)
-                    self.profiles_listbox.delete(selection)
-                    update_status("✓ Perfil eliminado")
-                else:
-                    messagebox.showwarning("Aviso", "No puedes eliminar el perfil por defecto")
-
-class WhitelistDialog(CustomDialog):
-    """Dialog for managing whitelist."""
-    def __init__(self, parent):
-        super().__init__(parent, "Gestor de Whitelist", width=500, height=400)
-        self.whitelist = get_whitelist()
-        self.create_widgets()
-    
-    def create_widgets(self):
-        # Title
-        title_label = tk.Label(self, text="✅ GESTOR DE WHITELIST", 
-                              font=("Segoe UI", 14, "bold"),
-                              fg=success_color, bg=bg_dark)
-        title_label.pack(pady=10)
-        
-        # Tabs
-        notebook = ttk.Notebook(self)
-        notebook.pack(fill=tk.BOTH, expand=True, padx=10, pady=10)
-        
-        # Apps tab
-        apps_frame = tk.Frame(notebook, bg=bg_dark)
-        notebook.add(apps_frame, text="Aplicaciones")
-        
-        tk.Label(apps_frame, text="Apps permitidas:", font=("Segoe UI", 10),
-                fg=text_color, bg=bg_dark).pack(anchor=tk.W, padx=10, pady=5)
-        
-        self.apps_listbox = tk.Listbox(apps_frame, bg=bg_light, fg=success_color,
-                                       font=("Segoe UI", 9), height=8)
-        self.apps_listbox.pack(fill=tk.BOTH, expand=True, padx=10, pady=5)
-        
-        for app in self.whitelist.get("apps", []):
-            self.apps_listbox.insert(tk.END, f"  {app}")
-        
-        apps_btn_frame = tk.Frame(apps_frame, bg=bg_dark)
-        apps_btn_frame.pack(fill=tk.X, padx=10, pady=5)
-        
-        tk.Button(apps_btn_frame, text="+ Agregar", bg=success_color, fg=bg_dark,
-                 command=self.add_app, relief=tk.FLAT, padx=15).pack(side=tk.LEFT, padx=5)
-        tk.Button(apps_btn_frame, text="- Quitar", bg=danger_color, fg="white",
-                 command=self.remove_app, relief=tk.FLAT, padx=15).pack(side=tk.LEFT, padx=5)
-        
-        # Websites tab
-        web_frame = tk.Frame(notebook, bg=bg_dark)
-        notebook.add(web_frame, text="Sitios Web")
-        
-        tk.Label(web_frame, text="Sitios permitidos:", font=("Segoe UI", 10),
-                fg=text_color, bg=bg_dark).pack(anchor=tk.W, padx=10, pady=5)
-        
-        self.web_listbox = tk.Listbox(web_frame, bg=bg_light, fg=success_color,
-                                      font=("Segoe UI", 9), height=8)
-        self.web_listbox.pack(fill=tk.BOTH, expand=True, padx=10, pady=5)
-        
-        for web in self.whitelist.get("websites", []):
-            self.web_listbox.insert(tk.END, f"  {web}")
-        
-        web_btn_frame = tk.Frame(web_frame, bg=bg_dark)
-        web_btn_frame.pack(fill=tk.X, padx=10, pady=5)
-        
-        tk.Button(web_btn_frame, text="+ Agregar", bg=success_color, fg=bg_dark,
-                 command=self.add_website, relief=tk.FLAT, padx=15).pack(side=tk.LEFT, padx=5)
-        tk.Button(web_btn_frame, text="- Quitar", bg=danger_color, fg="white",
-                 command=self.remove_website, relief=tk.FLAT, padx=15).pack(side=tk.LEFT, padx=5)
-        
-        # Close button
-        tk.Button(self, text="Guardar y Cerrar", bg=accent_color, fg=bg_dark,
-                 font=("Segoe UI", 10, "bold"), command=self.save_and_close,
-                 relief=tk.FLAT, padx=20).pack(pady=10)
-    
-    def add_app(self):
-        value = tk.simpledialog.askstring("Agregar App", "Nombre de la aplicación:")
-        if value:
-            if value not in self.whitelist["apps"]:
-                self.whitelist["apps"].append(value)
-                self.apps_listbox.insert(tk.END, f"  {value}")
-                update_status(f"✓ {value} agregada a whitelist")
-    
-    def remove_app(self):
-        selection = self.apps_listbox.curselection()
-        if selection:
-            self.apps_listbox.delete(selection)
-            app = list(self.whitelist["apps"])[selection[0]]
-            self.whitelist["apps"].remove(app)
-    
-    def add_website(self):
-        value = tk.simpledialog.askstring("Agregar Sitio", "URL del sitio web:")
-        if value:
-            if value not in self.whitelist["websites"]:
-                self.whitelist["websites"].append(value)
-                self.web_listbox.insert(tk.END, f"  {value}")
-                update_status(f"✓ {value} agregada a whitelist")
-    
-    def remove_website(self):
-        selection = self.web_listbox.curselection()
-        if selection:
-            self.web_listbox.delete(selection)
-            web = list(self.whitelist["websites"])[selection[0]]
-            self.whitelist["websites"].remove(web)
-    
-    def save_and_close(self):
-        save_whitelist(self.whitelist)
-        update_status("✓ Whitelist guardada")
+    def _close(self):
+        self.monitor.stop()
         self.destroy()
 
-class ScheduleDialog(CustomDialog):
-    """Dialog for managing schedule."""
-    def __init__(self, parent):
-        super().__init__(parent, "Gestor de Horarios", width=500, height=350)
-        self.schedule = get_schedule()
-        self.create_widgets()
-    
-    def create_widgets(self):
-        # Title
-        title_label = tk.Label(self, text="⏰ GESTOR DE HORARIOS", 
-                              font=("Segoe UI", 14, "bold"),
-                              fg=warning_color, bg=bg_dark)
-        title_label.pack(pady=10)
-        
-        # Work hours section
-        frame = tk.Frame(self, bg=bg_dark)
-        frame.pack(fill=tk.X, padx=20, pady=10)
-        
-        tk.Label(frame, text="Horario de trabajo:", font=("Segoe UI", 11, "bold"),
-                fg=text_color, bg=bg_dark).pack(anchor=tk.W)
-        
-        time_frame = tk.Frame(frame, bg=bg_dark)
-        time_frame.pack(fill=tk.X, pady=5)
-        
-        tk.Label(time_frame, text="Inicio:", fg=text_secondary, bg=bg_dark).pack(side=tk.LEFT, padx=5)
-        self.start_entry = tk.Entry(time_frame, bg=bg_light, fg=text_color,
-                                    font=("Segoe UI", 10), width=10)
-        self.start_entry.insert(0, self.schedule["work_hours"]["start"])
-        self.start_entry.pack(side=tk.LEFT, padx=5)
-        
-        tk.Label(time_frame, text="Fin:", fg=text_secondary, bg=bg_dark).pack(side=tk.LEFT, padx=5)
-        self.end_entry = tk.Entry(time_frame, bg=bg_light, fg=text_color,
-                                  font=("Segoe UI", 10), width=10)
-        self.end_entry.insert(0, self.schedule["work_hours"]["end"])
-        self.end_entry.pack(side=tk.LEFT, padx=5)
-        
-        # Break duration
-        break_frame = tk.Frame(self, bg=bg_dark)
-        break_frame.pack(fill=tk.X, padx=20, pady=10)
-        
-        tk.Label(break_frame, text="Duración de descansos (minutos):", 
-                font=("Segoe UI", 11, "bold"), fg=text_color, bg=bg_dark).pack(anchor=tk.W)
-        
-        self.break_entry = tk.Entry(break_frame, bg=bg_light, fg=text_color,
-                                    font=("Segoe UI", 10), width=10)
-        self.break_entry.insert(0, str(self.schedule.get("break_duration", 15)))
-        self.break_entry.pack(anchor=tk.W, pady=5)
-        
-        # Buttons
-        btn_frame = tk.Frame(self, bg=bg_dark)
-        btn_frame.pack(fill=tk.X, padx=20, pady=10)
-        
-        tk.Button(btn_frame, text="Guardar", bg=success_color, fg=bg_dark,
-                 font=("Segoe UI", 10, "bold"), command=self.save_schedule,
-                 relief=tk.FLAT, padx=20).pack(side=tk.LEFT, padx=5)
-        
-        tk.Button(btn_frame, text="Cerrar", bg=bg_lighter, fg=text_color,
-                 font=("Segoe UI", 10, "bold"), command=self.destroy,
-                 relief=tk.FLAT, padx=20).pack(side=tk.RIGHT, padx=5)
-    
-    def save_schedule(self):
-        try:
-            self.schedule["work_hours"]["start"] = self.start_entry.get()
-            self.schedule["work_hours"]["end"] = self.end_entry.get()
-            self.schedule["break_duration"] = int(self.break_entry.get())
-            save_schedule(self.schedule)
-            update_status("✓ Horario guardado")
-            self.destroy()
-        except Exception as e:
-            messagebox.showerror("Error", f"Error al guardar horario: {e}")
-
-class ZenModeDialog(CustomDialog):
-    """Dialog for configuring zen mode."""
-    def __init__(self, parent):
-        super().__init__(parent, "Modo Zen", width=450, height=300)
-        self.create_widgets()
-    
-    def create_widgets(self):
-        # Title
-        title_label = tk.Label(self, text="🧘 MODO ZEN", 
-                              font=("Segoe UI", 14, "bold"),
-                              fg=accent_color, bg=bg_dark)
-        title_label.pack(pady=15)
-        
-        # Description
-        desc = tk.Label(self, text="El Modo Zen desactiva todas las distracciones y\ncrea un ambiente perfecto para concentrarse",
-                       font=("Segoe UI", 10), fg=text_secondary, bg=bg_dark)
-        desc.pack(pady=10)
-        
-        # Options
-        self.duration_var = tk.StringVar(value="60")
-        
-        options_frame = tk.Frame(self, bg=bg_dark)
-        options_frame.pack(fill=tk.BOTH, expand=True, padx=20, pady=15)
-        
-        tk.Label(options_frame, text="Duración (minutos):", font=("Segoe UI", 10),
-                fg=text_color, bg=bg_dark).pack(anchor=tk.W, pady=5)
-        
-        duration_entry = tk.Entry(options_frame, textvariable=self.duration_var,
-                                 bg=bg_light, fg=text_color, font=("Segoe UI", 10), width=15)
-        duration_entry.pack(anchor=tk.W, padx=10, pady=5)
-        
-        # Buttons
-        btn_frame = tk.Frame(self, bg=bg_dark)
-        btn_frame.pack(fill=tk.X, padx=20, pady=15)
-        
-        tk.Button(btn_frame, text="🧘 Activar", bg=success_color, fg=bg_dark,
-                 font=("Segoe UI", 11, "bold"), command=self.activate_zen,
-                 relief=tk.FLAT, padx=30, pady=10).pack(side=tk.LEFT, padx=5)
-        
-        tk.Button(btn_frame, text="Cerrar", bg=bg_lighter, fg=text_color,
-                 font=("Segoe UI", 11, "bold"), command=self.destroy,
-                 relief=tk.FLAT, padx=30, pady=10).pack(side=tk.RIGHT, padx=5)
-    
-    def activate_zen(self):
-        duration = self.duration_var.get()
-        try:
-            minutes = int(duration)
-            update_status(f"🧘 Modo Zen activado por {minutes} minutos")
-            messagebox.showinfo("Zen Mode", 
-                              f"Modo Zen activado.\nTiempo: {minutes} minutos\n\n"
-                              "Disfruta del enfoque total. Todas las notificaciones están silenciadas.")
-            self.destroy()
-        except ValueError:
-            messagebox.showerror("Error", "Ingresa un número válido de minutos")
-
-class ReportsDialog(CustomDialog):
-    """Dialog for viewing detailed reports."""
-    def __init__(self, parent):
-        super().__init__(parent, "Reportes Detallados", width=600, height=450)
-        self.create_widgets()
-    
-    def create_widgets(self):
-        # Title
-        title_label = tk.Label(self, text="📊 REPORTES DETALLADOS", 
-                              font=("Segoe UI", 14, "bold"),
-                              fg=accent_color, bg=bg_dark)
-        title_label.pack(pady=10)
-        
-        # Report content
-        try:
-            stats = AdvancedStats()
-            trend = stats.get_productivity_trend(days=7)
-            health = stats.get_health_metrics()
-            
-            report_text = f"""
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-📈 REPORTE SEMANAL DE PRODUCTIVIDAD
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-🎯 TENDENCIAS (Últimos 7 días):
-   • Dirección: {trend.get('trend', 'Sin datos')}
-   • Enfoque promedio: {trend.get('average_focus', 0):.1f} min/día
-   • Sesiones completadas: {trend.get('sessions', 0)}
-   • Días productivos: {trend.get('productive_days', 0)}/7
-
-💪 SALUD DIGITAL:
-   • Tiempo en pantalla: {health.get('screen_time', 0)} min
-   • Frecuencia de descansos: {health.get('break_frequency', 0)} descansos
-   • Score de bienestar: {health.get('digital_wellness_score', 0)}/100
-   • Estado: {'✓ Excelente' if health.get('digital_wellness_score', 0) > 80 else '⚠ Normal' if health.get('digital_wellness_score', 0) > 60 else '⚠ Requiere mejora'}
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-🎓 RECOMENDACIONES:
-   • Mantén sesiones de enfoque de 50 minutos
-   • Descansa 10 minutos después de cada sesión
-   • Toma descansos cada 2 horas para cuidar tu vista
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-            """
-        except Exception as e:
-            report_text = f"Error al generar reporte: {e}"
-        
-        text_widget = scrolledtext.ScrolledText(self, bg="#0f0f1e", fg=success_color,
-                                               font=("Courier New", 9), height=18)
-        text_widget.pack(fill=tk.BOTH, expand=True, padx=10, pady=10)
-        text_widget.insert(tk.END, report_text)
-        text_widget.config(state=tk.DISABLED)
-        
-        # Buttons
-        btn_frame = tk.Frame(self, bg=bg_dark)
-        btn_frame.pack(fill=tk.X, padx=10, pady=10)
-        
-        tk.Button(btn_frame, text="Exportar", bg=success_color, fg=bg_dark,
-                 font=("Segoe UI", 10, "bold"), relief=tk.FLAT, padx=20).pack(side=tk.LEFT, padx=5)
-        
-        tk.Button(btn_frame, text="Cerrar", bg=bg_lighter, fg=text_color,
-                 font=("Segoe UI", 10, "bold"), command=self.destroy,
-                 relief=tk.FLAT, padx=20).pack(side=tk.RIGHT, padx=5)
-
-# ======================
-# Utility Functions
-# ======================
-
-def update_status(message):
-    """Update status label and add to log."""
-    global status_label, log_text
-    if status_label:
-        status_label.config(text=message)
-        status_label.update()
-    if log_text:
-        log_text.config(state=tk.NORMAL)
-        timestamp = datetime.now().strftime("%H:%M:%S")
-        log_text.insert(tk.END, f"[{timestamp}] {message}\n")
-        log_text.see(tk.END)
-        log_text.config(state=tk.DISABLED)
-
-def start_guardian():
-    """Start Guardian monitoring."""
-    global monitor_running
-    if not monitor_running:
-        monitor_running = True
-        if MONITOR_AVAILABLE:
-            update_status("✓ Guardian iniciado - Monitoreando aplicaciones...")
-            threading.Thread(target=monitor_apps, daemon=True).start()
-        else:
-            update_status("⚠ Guardian iniciado sin monitoreo (falta pygetwindow)")
-
-def stop_guardian():
-    """Stop Guardian monitoring."""
-    global monitor_running
-    monitor_running = False
-    update_status("⏹ Guardian detenido")
-
-def show_stats():
-    """Show productivity statistics with custom dialog."""
-    try:
-        stats = AdvancedStats()
-        trend = stats.get_productivity_trend(days=7)
-        health = stats.get_health_metrics()
-        
-        message = f"""
-📊 ESTADÍSTICAS DE PRODUCTIVIDAD
-
-Tendencia (7 días): {trend.get('trend', 'Sin datos')}
-Score promedio: {trend.get('average_focus', 0):.1f} min/día
-
-💪 Salud Digital:
-Tiempo en pantalla: {health.get('screen_time', 0)} min
-Frecuencia de descansos: {health.get('break_frequency', 0)}
-Score de bienestar: {health.get('digital_wellness_score', 0)}/100
-        """
-        messagebox.showinfo("Estadísticas", message)
-    except Exception as e:
-        messagebox.showerror("Error", f"No se pudieron cargar las estadísticas: {e}")
-
-def show_alerts():
-    """Show smart alerts."""
-    try:
-        alerts = SmartAlerts()
-        dummy_stats = {
-            "focus_time_minutes": 60,
-            "blocks_today": 5,
-            "productivity_score": 75
-        }
-        
-        alerts_list = alerts.check_productivity_alerts(dummy_stats)
-        
-        message = "🚨 ALERTAS INTELIGENTES\n\n"
-        for alert in alerts_list:
-            message += f"• {alert.get('message', alert)}\n"
-        
-        if not alerts_list:
-            message += "✓ No hay alertas en este momento"
-        
-        messagebox.showinfo("Alertas", message)
-    except Exception as e:
-        messagebox.showerror("Error", f"Error al obtener alertas: {e}")
-
-def export_report():
-    """Export productivity report."""
-    try:
-        exporter = AdvancedExporter()
-        
-        dummy_stats = {
-            "focus_time": 120,
-            "blocks_count": 8,
-            "sessions": 3,
-            "productivity_score": 75,
-            "top_blocked_apps": []
-        }
-        
-        filepath = exporter.generate_weekly_report(dummy_stats)
-        messagebox.showinfo("Éxito", f"Reporte exportado:\n{filepath}")
-        update_status(f"✓ Reporte exportado: {filepath}")
-    except Exception as e:
-        messagebox.showerror("Error", f"Error al exportar reporte: {e}")
-
-def show_goals():
-    """Show and manage daily goals."""
-    try:
-        goals_manager = DailyGoalsManager()
-        goals = goals_manager.get_goals()
-        
-        message = """
-🎯 METAS DIARIAS
-
-Tiempo de enfoque: {} min
-Límite de bloqueos: {} apps
-Tiempo de descanso: {} min
-        """.format(
-            goals.get("focus_time", 480),
-            goals.get("blocks_limit", 10),
-            goals.get("break_time", 300)
-        )
-        messagebox.showinfo("Metas", message)
-    except Exception as e:
-        messagebox.showerror("Error", f"Error al cargar metas: {e}")
-
-def switch_profile():
-    """Switch between profiles - opens ProfileDialog."""
-    dialog = ProfileDialog(root)
-    root.wait_window(dialog)
-
-def manage_whitelist():
-    """Manage whitelist apps - opens WhitelistDialog."""
-    dialog = WhitelistDialog(root)
-    root.wait_window(dialog)
-
-def configure_schedule():
-    """Configure schedule - opens ScheduleDialog."""
-    dialog = ScheduleDialog(root)
-    root.wait_window(dialog)
-
-def activate_zen_mode():
-    """Activate zen mode - opens ZenModeDialog."""
-    dialog = ZenModeDialog(root)
-    root.wait_window(dialog)
-
-def view_reports():
-    """View detailed reports - opens ReportsDialog."""
-    dialog = ReportsDialog(root)
-    root.wait_window(dialog)
-
-# ======================
-# Main UI Setup
-# ======================
-
-def create_main_window():
-    """Create and configure main Guardian window."""
-    global root, status_label, log_text, current_settings
-    
-    root = tk.Tk()
-    root.title("Guardian v5.1 - Bienestar Digital")
-    root.geometry("980x720")
-    root.config(bg=bg_dark)
-    
-    # Set icon if available
-    try:
-        icon_path = Path("config/guardian.ico")
-        if icon_path.exists():
-            root.iconbitmap(str(icon_path))
-    except Exception as e:
-        print(f"Could not set icon: {e}")
-    
-    current_settings = load_settings()
-    
-    # ===== HEADER (minimal) =====
-    header = tk.Frame(root, bg=bg_dark, height=74)
-    header.pack(fill=tk.X, padx=18, pady=(16, 8))
-    header.pack_propagate(False)
-
-    title = tk.Label(
-        header,
-        text="Guardian",
-        font=("Segoe UI", 25, "bold"),
-        fg=text_color,
-        bg=bg_dark,
-    )
-    title.pack(anchor=tk.W)
-
-    subtitle = tk.Label(
-        header,
-        text="Sistema de bienestar digital local",
-        font=("Segoe UI", 10),
-        fg=text_secondary,
-        bg=bg_dark,
-    )
-    subtitle.pack(anchor=tk.W)
-
-    # ===== MAIN CONTENT =====
-    main_frame = tk.Frame(root, bg=bg_dark)
-    main_frame.pack(fill=tk.BOTH, expand=True, padx=18, pady=(0, 14))
-    
-    # Status
-    status_label = tk.Label(main_frame, text="Guardian listo",
-                           font=("Segoe UI", 10, "bold"), fg=success_color, bg=bg_dark)
-    status_label.pack(anchor=tk.W, pady=(0, 10))
-
-    # Main control buttons - Row 1
-    button_frame1 = tk.Frame(main_frame, bg=bg_dark)
-    button_frame1.pack(fill=tk.X, pady=5)
-    
-    tk.Button(button_frame1, text="Iniciar", bg=bg_lighter, fg=text_color,
-              font=("Segoe UI", 11, "bold"), command=start_guardian,
-              relief=tk.FLAT, bd=0, padx=18, pady=10).pack(side=tk.LEFT, padx=4)
-    
-    tk.Button(button_frame1, text="Detener", bg=bg_lighter, fg=text_color,
-              font=("Segoe UI", 11, "bold"), command=stop_guardian,
-              relief=tk.FLAT, bd=0, padx=18, pady=10).pack(side=tk.LEFT, padx=4)
-    
-    tk.Button(button_frame1, text="Estadísticas", bg=bg_lighter, fg=text_color,
-              font=("Segoe UI", 11, "bold"), command=show_stats,
-              relief=tk.FLAT, bd=0, padx=18, pady=10).pack(side=tk.LEFT, padx=4)
-    
-    tk.Button(button_frame1, text="Alertas", bg=bg_lighter, fg=text_color,
-              font=("Segoe UI", 11, "bold"), command=show_alerts,
-              relief=tk.FLAT, bd=0, padx=18, pady=10).pack(side=tk.LEFT, padx=4)
-    
-    tk.Button(button_frame1, text="Metas", bg=bg_lighter, fg=text_color,
-              font=("Segoe UI", 11, "bold"), command=show_goals,
-              relief=tk.FLAT, bd=0, padx=18, pady=10).pack(side=tk.LEFT, padx=4)
-    
-    tk.Button(button_frame1, text="Exportar", bg=bg_lighter, fg=text_color,
-              font=("Segoe UI", 11, "bold"), command=export_report,
-              relief=tk.FLAT, bd=0, padx=18, pady=10).pack(side=tk.LEFT, padx=4)
-    
-    # Feature buttons - Row 2
-    button_frame2 = tk.Frame(main_frame, bg=bg_dark)
-    button_frame2.pack(fill=tk.X, pady=5)
-    
-    tk.Button(button_frame2, text="Perfiles", bg=bg_lighter, fg=text_color,
-              font=("Segoe UI", 10, "bold"), command=switch_profile,
-              relief=tk.FLAT, bd=0, padx=14, pady=8).pack(side=tk.LEFT, padx=4)
-    
-    tk.Button(button_frame2, text="Whitelist", bg=bg_lighter, fg=text_color,
-              font=("Segoe UI", 10, "bold"), command=manage_whitelist,
-              relief=tk.FLAT, bd=0, padx=14, pady=8).pack(side=tk.LEFT, padx=4)
-    
-    tk.Button(button_frame2, text="Horario", bg=bg_lighter, fg=text_color,
-              font=("Segoe UI", 10, "bold"), command=configure_schedule,
-              relief=tk.FLAT, bd=0, padx=14, pady=8).pack(side=tk.LEFT, padx=4)
-    
-    tk.Button(button_frame2, text="Zen Mode", bg=bg_lighter, fg=text_color,
-              font=("Segoe UI", 10, "bold"), command=activate_zen_mode,
-              relief=tk.FLAT, bd=0, padx=14, pady=8).pack(side=tk.LEFT, padx=4)
-    
-    tk.Button(button_frame2, text="Reportes", bg=bg_lighter, fg=text_color,
-              font=("Segoe UI", 10, "bold"), command=view_reports,
-              relief=tk.FLAT, bd=0, padx=14, pady=8).pack(side=tk.LEFT, padx=4)
-    
-    # Apps bloqueadas
-    apps_label = tk.Label(main_frame, text="Aplicaciones bloqueadas",
-                          font=("Segoe UI", 11, "bold"), fg=text_color, bg=bg_dark)
-    apps_label.pack(anchor=tk.W, pady=(15, 5))
-    
-    apps_listbox = tk.Listbox(main_frame, bg=bg_light, fg=text_color,
-                              font=("Courier New", 10), height=5)
-    apps_listbox.pack(fill=tk.BOTH, expand=False, pady=(0, 10))
-    
-    blocked_apps = get_blocked_apps()
-    for app in blocked_apps[:12]:
-        apps_listbox.insert(tk.END, f"  • {app}")
-    
-    if not blocked_apps:
-        apps_listbox.insert(tk.END, "  (Sin aplicaciones bloqueadas)")
-    
-    # Log
-    log_label = tk.Label(main_frame, text="Actividad",
-                        font=("Segoe UI", 11, "bold"), fg=text_color, bg=bg_dark)
-    log_label.pack(anchor=tk.W, pady=(10, 5))
-    
-    log_text = scrolledtext.ScrolledText(main_frame, bg=bg_light, fg=text_color,
-                                         font=("Courier New", 9), height=8)
-    log_text.pack(fill=tk.BOTH, expand=True)
-    log_text.config(state=tk.DISABLED)
-    
-    # Footer
-    footer = tk.Frame(root, bg=bg_dark, height=30)
-    footer.pack(fill=tk.X, padx=18, pady=(0, 10))
-    footer.pack_propagate(False)
-    
-    footer_text = tk.Label(footer, text="v5.1 · Perfiles · Whitelist · Horario · Zen · Reportes",
-                           font=("Segoe UI", 9), fg=text_secondary, bg=bg_dark)
-    footer_text.pack(anchor=tk.W)
-    
-    # Initialize
-    update_status("✓ Guardian v5.1 iniciado - Listo para monitorear")
-    log_info("Guardian v5.1 iniciado exitosamente")
-    
-    return root
-
-# ======================
-# Main Entry Point
-# ======================
-
 if __name__ == "__main__":
-    root = create_main_window()
-    root.mainloop()
+    GuardianApp().mainloop()
