@@ -37,13 +37,15 @@ public sealed class GuardianEngine : IDisposable
         _file = Path.Combine(folder, "guardian-state.json");
         try { Data = File.Exists(_file) ? JsonSerializer.Deserialize<State>(File.ReadAllText(_file)) ?? new State() : new State(); }
         catch { Data = new State(); }
+        _tracking = Data.TrackingEnabled;
+        _blocking = Data.BlockingEnabled;
         _poll.Tick += (_, _) => Tick();
         _focusTick.Tick += (_, _) => FocusTick();
         _poll.Start();
     }
     private static TimeSpan MaxZero(TimeSpan t) => t < TimeSpan.Zero ? TimeSpan.Zero : t;
-    public bool TrackingEnabled { get => _tracking; set { _tracking = value; Changed?.Invoke(); } }
-    public bool BlockingEnabled { get => _blocking; set { _blocking = value; Changed?.Invoke(); } }
+    public bool TrackingEnabled { get => _tracking; set { _tracking = value; Data.TrackingEnabled = value; Save(); Changed?.Invoke(); } }
+    public bool BlockingEnabled { get => _blocking; set { _blocking = value; Data.BlockingEnabled = value; Save(); Changed?.Invoke(); } }
     private void Tick()
     {
         var now = DateTime.Now;
@@ -128,7 +130,8 @@ public sealed class State
 {
     public List<UsageEntry> Usage { get; set; } = new();
     public List<SessionEntry> Sessions { get; set; } = new();
-    public List<string> Blocked { get; set; } = new();\n    public bool TrackingEnabled { get; set; } = true;\n    public bool BlockingEnabled { get; set; } = true;
+    public List<string> Blocked { get; set; } = new();
+    public bool TrackingEnabled { get; set; } = true;\n    public bool BlockingEnabled { get; set; } = true;
     public DateTime? ActiveFocusStarted { get; set; }
     public int ActiveFocusMinutes { get; set; }
 }
