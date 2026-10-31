@@ -15,6 +15,7 @@ public sealed class GuardianEngine : IAsyncDisposable
     private readonly DispatcherTimer _pollTimer = new() { Interval = TimeSpan.FromSeconds(1) };
     private readonly DispatcherTimer _focusTickTimer = new() { Interval = TimeSpan.FromSeconds(1) };
     private readonly DispatcherTimer _saveTimer = new() { Interval = TimeSpan.FromSeconds(15) };
+    private readonly SemaphoreSlim _saveGate = new(1, 1);
     private UsageLedger? _usageLedger;
     private bool _initialized;
     private bool _disposed;
@@ -209,15 +210,19 @@ public sealed class GuardianEngine : IAsyncDisposable
         Changed?.Invoke();
     }
 
-    private async Task SaveAsync()
+    private async Task SaveAsync(bool finalSave = false)
     {
-        if (!_initialized || _disposed)
+        if (!_initialized || (_disposed && !finalSave))
             return;
 
+        await _saveGate.WaitAsync();
         try
         {
-            // Serialize on the UI thread to produce a consistent snapshot before
-            // asynchronous disk I/O begins.
+            // Re-check after acquiring the gate: a queued periodic write must
+            // not run after shutdown and overwrite the final state snapshot.
+            if (_disposed && !finalSave)
+                return;
+
             var snapshot = JsonSerializer.Serialize(Data, JsonOptions);
             await _store.SaveJsonAsync(snapshot);
             PersistenceError = null;
@@ -225,6 +230,10 @@ public sealed class GuardianEngine : IAsyncDisposable
         catch (Exception exception) when (exception is IOException or UnauthorizedAccessException)
         {
             PersistenceError = $"Guardian could not save local data: {exception.Message}";
+        }
+        finally
+        {
+            _saveGate.Release();
         }
     }
 
@@ -245,17 +254,6 @@ public sealed class GuardianEngine : IAsyncDisposable
         if (interruptedSession is not null)
             Data.Sessions.Insert(0, interruptedSession);
 
-        if (_initialized)
-        {
-            try
-            {
-                var snapshot = JsonSerializer.Serialize(Data, JsonOptions);
-                await _store.SaveJsonAsync(snapshot);
-            }
-            catch (Exception exception) when (exception is IOException or UnauthorizedAccessException)
-            {
-                PersistenceError = $"Guardian could not save local data: {exception.Message}";
-            }
-        }
+        await SaveAsync(finalSave: true);
     }
 }

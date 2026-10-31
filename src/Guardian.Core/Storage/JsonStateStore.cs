@@ -31,6 +31,7 @@ public sealed class JsonStateStore
     }
 
     public string FilePath => _filePath;
+    public bool IsWritable { get; private set; } = true;
 
     public async Task<(GuardianState State, string? Warning)> LoadAsync(CancellationToken cancellationToken = default)
     {
@@ -52,20 +53,26 @@ public sealed class JsonStateStore
                 File.Move(_filePath, backupPath, overwrite: false);
                 return (new GuardianState(), $"The local data file was invalid. A backup was kept at {backupPath}.");
             }
-            catch (IOException)
+            catch (Exception exception) when (exception is IOException or UnauthorizedAccessException)
             {
-                return (new GuardianState(), "The local data file could not be read. Guardian started with empty in-memory data; the original file was left untouched.");
+                IsWritable = false;
+                return (new GuardianState(), "The local data file was invalid, and Guardian could not move it to a backup. The original file was left untouched and will not be overwritten.");
             }
         }
         catch (Exception exception) when (exception is IOException or UnauthorizedAccessException)
         {
-            return (new GuardianState(), $"Guardian could not read its local data file: {exception.Message}");
+            IsWritable = false;
+            return (new GuardianState(), $"Guardian could not read its local data file: {exception.Message} The original file will not be overwritten.");
         }
     }
 
     public async Task SaveJsonAsync(string json, CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(json);
+
+        if (!IsWritable)
+            throw new IOException("Guardian cannot safely write because the existing local data file could not be read.");
+
         await _writeLock.WaitAsync(cancellationToken);
 
         var directory = Path.GetDirectoryName(_filePath);
@@ -86,7 +93,7 @@ public sealed class JsonStateStore
                 if (File.Exists(temporaryPath))
                     File.Delete(temporaryPath);
             }
-            catch (IOException)
+            catch (Exception exception) when (exception is IOException or UnauthorizedAccessException)
             {
                 // A failed cleanup must not hide the original persistence error.
             }
