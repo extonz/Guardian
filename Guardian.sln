@@ -1,0 +1,30 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Guardian.Core", "src\Guardian.Core\Guardian.Core.csproj", "{1B7FBC2A-7F66-47A7-8B1F-3F5440AF7210}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Guardian.App", "src\Guardian.App\Guardian.App.csproj", "{2B31DE28-ED78-4FA0-A38B-FE054E4E7351}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Guardian.Core.Tests", "tests\Guardian.Core.Tests\Guardian.Core.Tests.csproj", "{37B02EE0-B0BA-4981-B54A-36EBA0DD4E5F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{1B7FBC2A-7F66-47A7-8B1F-3F5440AF7210}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1B7FBC2A-7F66-47A7-8B1F-3F5440AF7210}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1B7FBC2A-7F66-47A7-8B1F-3F5440AF7210}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1B7FBC2A-7F66-47A7-8B1F-3F5440AF7210}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2B31DE28-ED78-4FA0-A38B-FE054E4E7351}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2B31DE28-ED78-4FA0-A38B-FE054E4E7351}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2B31DE28-ED78-4FA0-A38B-FE054E4E7351}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2B31DE28-ED78-4FA0-A38B-FE054E4E7351}.Release|Any CPU.Build.0 = Release|Any CPU
+		{37B02EE0-B0BA-4981-B54A-36EBA0DD4E5F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{37B02EE0-B0BA-4981-B54A-36EBA0DD4E5F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{37B02EE0-B0BA-4981-B54A-36EBA0DD4E5F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{37B02EE0-B0BA-4981-B54A-36EBA0DD4E5F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

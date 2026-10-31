@@ -4,3 +4,6 @@ obj/
 *.user
 *.suo
 *.cache
+TestResults/
+artifacts/
+*.tmp
