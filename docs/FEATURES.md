@@ -1,10 +1,13 @@
-# Funciones de Guardian 6
+# Guardian 7 features
 
-- Dashboard con estadísticas locales y actividad reciente.
-- Monitor cancellable en segundo plano.
-- Modo Zen para silenciar avisos del monitor.
-- Analíticas básicas y ajustes de aplicaciones/whitelist.
-- Persistencia JSON atómica en el directorio de datos del usuario.
-- Notificaciones del sistema opcionales.
+- Native C# / WPF Windows desktop interface.
+- Foreground application time tracking, stored locally by application name.
+- Focus timer with pause, resume, stop, and local session history.
+- Configurable app list that Guardian can gently minimize when active.
+- Separate persisted controls for tracking and blocking.
+- Local data deletion control.
+- No telemetry, window-title collection, keystroke logging, screenshots, or network upload.
 
-La detección depende de las APIs y permisos disponibles en cada sistema. No bloquea ni cierra aplicaciones.
+## Limitations
+
+Foreground-window detection is best-effort. App blocking is a productivity aid, not a security boundary: the user can reopen an application. Windows-critical processes are excluded from the block list. A Windows build and runtime verification are still required.
