@@ -64,7 +64,7 @@ public partial class MainWindow : Window
     }
     private void RefreshDashboard()
     {
-        if (!Dispatcher.CheckAccess()) { Dispatcher.BeginInvoke(RefreshDashboard); return; }
+        if (!Dispatcher.CheckAccess()) { Dispatcher.BeginInvoke(new Action(RefreshDashboard)); return; }
         UsageValue.Text = FormatDuration(_engine.TotalUsageToday);
         FocusValue.Text = $"{(int)_engine.FocusMinutesToday}m";
         var items = _engine.TodayUsage.ToList();
@@ -78,7 +78,7 @@ public partial class MainWindow : Window
     private static string FormatDuration(double seconds) => seconds >= 3600 ? $"{(int)(seconds/3600)}h {((int)(seconds%3600))/60}m" : $"{(int)(seconds/60)}m";
     private void RefreshBlocks()
     {
-        if (!Dispatcher.CheckAccess()) { Dispatcher.BeginInvoke(RefreshBlocks); return; }
+        if (!Dispatcher.CheckAccess()) { Dispatcher.BeginInvoke(new Action(RefreshBlocks)); return; }
         BlockList.ItemsSource = _engine.Data.Blocked.ToList();
         NoBlocksText.Visibility = _engine.Data.Blocked.Count == 0 ? Visibility.Visible : Visibility.Collapsed;
     }
@@ -95,7 +95,7 @@ public partial class MainWindow : Window
     }
     private void RefreshSessions()
     {
-        if (!Dispatcher.CheckAccess()) { Dispatcher.BeginInvoke(RefreshSessions); return; }
+        if (!Dispatcher.CheckAccess()) { Dispatcher.BeginInvoke(new Action(RefreshSessions)); return; }
         SessionList.ItemsSource = _engine.Data.Sessions.Take(8).Select(x => x.Display).ToList();
     }
     private void Monitoring_Changed(object sender, RoutedEventArgs e)
