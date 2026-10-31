@@ -128,7 +128,7 @@ public sealed class State
 {
     public List<UsageEntry> Usage { get; set; } = new();
     public List<SessionEntry> Sessions { get; set; } = new();
-    public List<string> Blocked { get; set; } = new();
+    public List<string> Blocked { get; set; } = new();\n    public bool TrackingEnabled { get; set; } = true;\n    public bool BlockingEnabled { get; set; } = true;
     public DateTime? ActiveFocusStarted { get; set; }
     public int ActiveFocusMinutes { get; set; }
 }
