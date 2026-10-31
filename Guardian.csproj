@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net10.0-windows</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <AssemblyName>Guardian</AssemblyName>
+    <RootNamespace>Guardian</RootNamespace>
+    <Version>7.0.0</Version>
+    <Description>Local-first digital wellbeing and focus app for Windows.</Description>
+  </PropertyGroup>
+</Project>
