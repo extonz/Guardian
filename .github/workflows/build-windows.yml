@@ -1,0 +1,37 @@
+name: Build Guardian Windows
+
+on:
+  push:
+    branches: [ "master", "main" ]
+  pull_request:
+    branches: [ "master", "main" ]
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '10.0.x'
+
+    - name: Restore dependencies
+      run: dotnet restore guardian-next/Guardian.sln
+
+    - name: Build
+      run: dotnet build guardian-next/Guardian.sln --configuration Release --no-restore
+
+    - name: Test
+      run: dotnet test guardian-next/Guardian.sln --configuration Release --no-build --verbosity normal
+
+    - name: Publish
+      run: dotnet publish guardian-next/Guardian/Guardian.csproj -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true -o out
+
+    - name: Upload Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: Guardian-Windows-x64
+        path: out/Guardian.exe
