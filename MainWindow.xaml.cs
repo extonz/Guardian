@@ -68,7 +68,7 @@ public partial class MainWindow : Window
         UsageValue.Text = FormatDuration(_engine.TotalUsageToday);
         FocusValue.Text = $"{(int)_engine.FocusMinutesToday}m";
         var items = _engine.TodayUsage.ToList();
-        AppsValue.Text = items.Count.ToString();
+        AppsValue.Text = _engine.Data.Usage.Where(x => x.Date == DateTime.Now.ToString("yyyy-MM-dd")).Select(x => x.Name).Distinct(StringComparer.OrdinalIgnoreCase).Count().ToString();
         var max = Math.Max(1, items.Count == 0 ? 1 : items.Max(x => x.Seconds));
         foreach (var item in items) item.Percent = item.Seconds / max * 100;
         UsageList.ItemsSource = items;
