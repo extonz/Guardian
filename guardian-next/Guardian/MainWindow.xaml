@@ -1,0 +1,72 @@
+<Window x:Class="Guardian.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:views="clr-namespace:Guardian.Views"
+        xmlns:viewmodels="clr-namespace:Guardian.ViewModels"
+        Title="Guardian" Height="700" Width="1000"
+        WindowStartupLocation="CenterScreen"
+        Background="#F5F5F5"
+        FontFamily="Segoe UI">
+
+    <Window.Resources>
+        <DataTemplate DataType="{x:Type viewmodels:DashboardViewModel}">
+            <views:DashboardView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type viewmodels:FocusViewModel}">
+            <views:FocusView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type viewmodels:BlockingViewModel}">
+            <views:BlockingView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type viewmodels:SettingsViewModel}">
+            <views:SettingsView />
+        </DataTemplate>
+
+        <Style x:Key="NavButton" TargetType="Button">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="#333333"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Padding" Value="15,10"/>
+            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Margin" Value="0,5"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" CornerRadius="6">
+                            <ContentPresenter HorizontalAlignment="Left" VerticalAlignment="Center" Margin="{TemplateBinding Padding}"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#E0E0E0"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Resources>
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="220"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- Sidebar Navigation -->
+        <Border Background="#EFEFEF" BorderBrush="#DDDDDD" BorderThickness="0,0,1,0">
+            <StackPanel Margin="15,30,15,15">
+                <TextBlock Text="Guardian" FontSize="20" FontWeight="Bold" Margin="10,0,0,30" Foreground="#222222"/>
+
+                <Button Content="Dashboard" Command="{Binding NavigateToDashboardCommand}" Style="{StaticResource NavButton}"/>
+                <Button Content="Focus Mode" Command="{Binding NavigateToFocusCommand}" Style="{StaticResource NavButton}"/>
+                <Button Content="App Blocking" Command="{Binding NavigateToBlockingCommand}" Style="{StaticResource NavButton}"/>
+                <Button Content="Settings" Command="{Binding NavigateToSettingsCommand}" Style="{StaticResource NavButton}"/>
+            </StackPanel>
+        </Border>
+
+        <!-- Main Content Area -->
+        <ContentControl Grid.Column="1" Content="{Binding CurrentViewModel}" />
+    </Grid>
+</Window>
