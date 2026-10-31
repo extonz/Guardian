@@ -50,7 +50,6 @@ public sealed class GuardianEngine : IDisposable
         var elapsed = now - _lastTick;
         _lastTick = now;
         if (elapsed < TimeSpan.Zero || elapsed > TimeSpan.FromSeconds(5)) elapsed = TimeSpan.FromSeconds(1);
-        if (!_tracking) { Changed?.Invoke(); return; }
         try
         {
             var hwnd = GetForegroundWindow();
@@ -60,13 +59,16 @@ public sealed class GuardianEngine : IDisposable
             using var process = Process.GetProcessById((int)pid);
             var name = process.ProcessName;
             if (string.IsNullOrWhiteSpace(name) || name.Equals("Idle", StringComparison.OrdinalIgnoreCase)) return;
-            var day = now.ToString("yyyy-MM-dd");
-            var entry = Data.Usage.FirstOrDefault(x => x.Date == day && x.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
-            if (entry == null) { entry = new UsageEntry { Date = day, Name = name }; Data.Usage.Add(entry); }
-            entry.Seconds += Math.Clamp(elapsed.TotalSeconds, 0, 2);
             if (BlockingEnabled && !ProtectedApps.Contains(name) && Data.Blocked.Contains(name, StringComparer.OrdinalIgnoreCase))
                 ShowWindow(hwnd, SW_MINIMIZE);
-            Save();
+            if (_tracking)
+            {
+                var day = now.ToString("yyyy-MM-dd");
+                var entry = Data.Usage.FirstOrDefault(x => x.Date == day && x.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
+                if (entry == null) { entry = new UsageEntry { Date = day, Name = name }; Data.Usage.Add(entry); }
+                entry.Seconds += Math.Clamp(elapsed.TotalSeconds, 0, 2);
+                Save();
+            }
             Changed?.Invoke();
         }
         catch (Exception ex) when (ex is ArgumentException or InvalidOperationException or System.ComponentModel.Win32Exception or OverflowException) { }
