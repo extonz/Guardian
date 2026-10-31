@@ -1,17 +1,32 @@
-# Install Guardian 7
+# Installation and development
 
-Guardian 7 is a native Windows desktop application written in C# and WPF. Python is not required.
+## Run from source
 
-Requirements: Windows 10/11 and the .NET 10 SDK.
+Requirements:
+- Windows 10 or Windows 11
+- .NET 10 SDK
 
-From the repository root, run in PowerShell:
+From the repository root:
 
-    dotnet restore Guardian.csproj
-    dotnet build Guardian.csproj -c Release
-    dotnet run --project Guardian.csproj
+\`\`\`powershell
+dotnet restore Guardian.sln
+dotnet build Guardian.sln -c Release
+dotnet test tests/Guardian.Core.Tests/Guardian.Core.Tests.csproj -c Release
+dotnet run --project src/Guardian.App/Guardian.App.csproj
+\`\`\`
 
-To publish a self-contained x64 executable:
+## Publish a standalone executable
 
-    dotnet publish Guardian.csproj -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true
+\`\`\`powershell
+dotnet publish src/Guardian.App/Guardian.App.csproj -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true -o artifacts/Guardian
+\`\`\`
 
-The output is in bin/Release/net10.0-windows/win-x64/publish/. Local state is stored under the user's LocalAppData/Guardian folder. The app does not upload activity data.
+The application is written to artifacts/Guardian/Guardian.exe.
+
+## Existing 7.0 data
+
+The 7.1 app continues using %LOCALAPPDATA%\Guardian\guardian-state.json and keeps the existing JSON property names. Back up that file before manually editing it. If Guardian cannot parse it, it attempts to move the malformed file to a timestamped backup rather than replacing it.
+
+## Notes
+
+Guardian uses Windows Presentation Foundation (WPF) and the Windows foreground-window API. The desktop application is not supported on Linux or macOS.
