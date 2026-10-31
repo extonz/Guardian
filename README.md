@@ -1,28 +1,41 @@
-# Guardian v6.0
+# Guardian 7.0
 
-Guardian is a cross-platform digital-wellbeing desktop app. This version is isolated under `guardian-v6/` so the existing v5 files and user data remain untouched while v6 is reviewed.
+Guardian is a native Windows digital-wellbeing and focus app, rewritten in C# and WPF. Python is not required to run or build the new app.
 
-## Install
+## Features
 
-Python 3.11+ is recommended.
+- Foreground application time tracking, stored locally by application name.
+- Focus timer with pause/resume and session history.
+- Configurable app list that Guardian gently minimizes when a listed app becomes active.
+- Separate controls for tracking and blocking.
+- Local data deletion control.
+- No telemetry, window-title collection, keystroke logging, screenshots, or network upload.
 
-```bash
-python -m venv .venv
-# Windows: .venv\\Scripts\\activate
-# macOS/Linux: source .venv/bin/activate
-python -m pip install -r requirements.txt
-python main.py
-```
+## Requirements
 
-Linux requires a working Tk installation. On Debian/Ubuntu: `sudo apt install python3-tk`.
+- Windows 10 or Windows 11
+- .NET 10 SDK to build from source
 
-## Notes
+## Build and run
 
-- App detection is best-effort and platform-dependent. Linux Wayland may restrict active-window detection; macOS may require Accessibility permission.
-- Guardian does not terminate applications. It detects configured app titles and offers non-blocking reminders.
-- Data lives in the platform's user-data directory, not the current working directory.
-- Run tests with `python -m pytest`.
+From the repository root, run these commands in PowerShell:
 
-## Build
+    dotnet restore Guardian.csproj
+    dotnet build Guardian.csproj -c Release
+    dotnet run --project Guardian.csproj
 
-GitHub Actions builds Windows, macOS and Linux packages on a tag (`v6.0.0`, etc.) or manual dispatch. Artifacts are uploaded per OS; release creation runs once after all builds finish.
+To publish a self-contained 64-bit Windows executable:
+
+    dotnet publish Guardian.csproj -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true
+
+The output is in bin/Release/net10.0-windows/win-x64/publish/.
+
+## Important limitations
+
+Application detection uses the Windows foreground-window API and is best-effort. Blocking gently minimizes the foreground window and is intentionally reversible; it is not parental control or a security boundary. The application has not yet been verified by a Windows build in this development session, so build and runtime validation are still required.
+
+The legacy Python implementation is being removed from this migration branch. The C# app is the intended application going forward.
+
+## License
+
+MIT. See LICENSE.
